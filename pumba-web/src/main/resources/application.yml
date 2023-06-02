@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/automobile?createDatabaseIfNotExist=true
+    username: root
+    password: root
+  application:
+    name: automobile
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+server:
+  servlet:
+    contextPath: /api
+jwt:
+  secret: kv!@#%^2H0SDFGHJUTRz35j@dkcj1$f0v%f^@#h
+  expiration: 330000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
