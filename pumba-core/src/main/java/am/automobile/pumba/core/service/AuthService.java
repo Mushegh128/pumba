@@ -1,9 +1,9 @@
 package am.automobile.pumba.core.service;
 
-import com.example.pumba.data.transfer.request.UserAuthRequest;
-import com.example.pumba.data.transfer.request.UserRegistrationRequest;
-import com.example.pumba.data.transfer.response.UserAuthResponse;
-import com.example.pumba.data.transfer.response.UserRegistrationResponse;
+import com.automobile.pumba.data.transfer.request.UserAuthRequest;
+import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
+import com.automobile.pumba.data.transfer.response.UserAuthResponse;
+import com.automobile.pumba.data.transfer.response.UserRegistrationResponse;
 
 /**
  * A service interface for authenticating and registering users.

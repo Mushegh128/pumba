@@ -1,8 +1,8 @@
 package am.automobile.pumba.core.security;
 
 import am.automobile.pumba.core.entity.User;
-import com.example.pumba.data.transfer.model.UserPermission;
-import com.example.pumba.data.transfer.model.UserRole;
+import com.automobile.pumba.data.transfer.model.UserPermission;
+import com.automobile.pumba.data.transfer.model.UserRole;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;

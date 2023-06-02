@@ -2,8 +2,8 @@ package am.automobile.pumba.core.mapper;
 
 import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.mapper.base.BaseMapper;
-import com.example.pumba.data.transfer.request.UserRegistrationRequest;
-import com.example.pumba.data.transfer.response.UserRegistrationResponse;
+import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
+import com.automobile.pumba.data.transfer.response.UserRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.pumba.data.transfer.response;
+package com.automobile.pumba.data.transfer.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

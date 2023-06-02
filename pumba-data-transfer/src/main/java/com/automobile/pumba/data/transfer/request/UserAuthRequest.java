@@ -1,4 +1,4 @@
-package com.example.pumba.data.transfer.request;
+package com.automobile.pumba.data.transfer.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

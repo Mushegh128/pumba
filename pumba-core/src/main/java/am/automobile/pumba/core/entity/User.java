@@ -1,7 +1,7 @@
 package am.automobile.pumba.core.entity;
 
-import com.example.pumba.data.transfer.model.UserPermission;
-import com.example.pumba.data.transfer.model.UserRole;
+import com.automobile.pumba.data.transfer.model.UserPermission;
+import com.automobile.pumba.data.transfer.model.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
