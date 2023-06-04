@@ -15,10 +15,10 @@ spring:
 server:
   servlet:
     contextPath: /api
-jwt:
-  secret: kv!@#%^2H0SDFGHJUTRz35j@dkcj1$f0v%f^@#h
-  expiration: 330000
-
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+jwt:
+  secret: k205j@dkjf0%^@
+  expiration: 330000
