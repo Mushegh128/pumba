@@ -40,6 +40,8 @@ public class User extends AbstractEntity {
     private LocalDate createAt;
     private boolean isEnable;
 
+    private boolean isBlocked;
+    private LocalDate blockedAt;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

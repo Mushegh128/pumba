@@ -1,7 +1,11 @@
 package com.automobile.pumba.data.transfer.request;
 
+import com.automobile.pumba.data.transfer.model.UserRoleGroupB;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -31,4 +35,7 @@ public class UserRegistrationRequest {
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "Password must contain at least one letter and one digit")
     private String password;
+    @NotNull(message = "Role is required")
+    @Enumerated(EnumType.STRING)
+    private UserRoleGroupB role;
 }

@@ -7,7 +7,6 @@ import am.automobile.pumba.core.mapper.UserRegistrationMapper;
 import am.automobile.pumba.core.repository.UserRepository;
 import am.automobile.pumba.core.service.AuthService;
 import am.automobile.pumba.core.util.JwtTokenUtil;
-import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
@@ -52,7 +51,6 @@ public class AuthServiceImpl implements AuthService {
             throw new UserEmailConflictException("User with email: " + userRequest.getEmail() + " already exists");
         }
         User user = userRegistrationMapper.toEntity(userRequest);
-        user.setRole(UserRole.USER);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userRepository.save(user);
         log.info("Succeed registered user by email: {}", userRequest.getEmail());
