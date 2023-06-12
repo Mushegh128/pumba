@@ -2,7 +2,6 @@ package am.automobile.pumba.core.service.impl;
 
 import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.exception.EntityNotFoundException;
-import am.automobile.pumba.core.exception.UserNotFoundException;
 import am.automobile.pumba.core.mapper.UserInfoUpdateMapper;
 import am.automobile.pumba.core.mapper.UserMapper;
 import am.automobile.pumba.core.repository.UserRepository;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -120,9 +120,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof User user) {
-            return userMapper.toResponse(user);
-        }
-        throw new UserNotFoundException("Currently authenticated user not found");
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User user = findByEmail(email);
+
+        return userMapper.toResponse(user);
     }
 }
