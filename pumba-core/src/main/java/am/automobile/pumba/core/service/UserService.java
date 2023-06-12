@@ -4,6 +4,7 @@ import am.automobile.pumba.core.entity.User;
 import com.automobile.pumba.data.transfer.model.UserPermission;
 import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.UserInfoUpdateRequest;
+import com.automobile.pumba.data.transfer.response.UserResponse;
 
 import java.util.List;
 
@@ -41,5 +42,7 @@ public interface UserService {
     void unblock(long userId);
 
     void updateUserInfo(long userId, UserInfoUpdateRequest userInfoUpdateRequest);
+
+    UserResponse getCurrentUser();
 
 }

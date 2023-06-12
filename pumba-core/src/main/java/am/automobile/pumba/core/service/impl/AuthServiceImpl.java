@@ -3,6 +3,7 @@ package am.automobile.pumba.core.service.impl;
 import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.exception.AuthenticatedException;
 import am.automobile.pumba.core.exception.UserEmailConflictException;
+import am.automobile.pumba.core.mapper.UserMapper;
 import am.automobile.pumba.core.mapper.UserRegistrationMapper;
 import am.automobile.pumba.core.repository.UserRepository;
 import am.automobile.pumba.core.service.AuthService;
@@ -27,19 +28,21 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRegistrationMapper userRegistrationMapper;
+    private final UserMapper userMapper;
 
     @Override
     public UserAuthResponse auth(UserAuthRequest userAuthRequest) {
-        log.info("Request from user {} to get authenticated", userAuthRequest.getEmail());
-        Optional<User> optionalUser = userRepository.findByEmail(userAuthRequest.getEmail());
+        log.info("Request from user {} to get authenticated", userAuthRequest.getUsername());
+        Optional<User> optionalUser = userRepository.findByEmail(userAuthRequest.getUsername());
 
         if (optionalUser.isEmpty()
                 || !passwordEncoder.matches(userAuthRequest.getPassword(), optionalUser.get().getPassword())) {
-            throw new AuthenticatedException(userAuthRequest.getEmail() + ": Provided wrong credentials for authentication");
+            throw new AuthenticatedException(userAuthRequest.getUsername() + ": Provided wrong credentials for authentication");
         }
-        log.info("Succeed get user by email: {}", userAuthRequest.getEmail());
+        log.info("Succeed get user by email: {}", userAuthRequest.getUsername());
         return UserAuthResponse.builder()
-                .token(jwtTokenUtil.generateToken(userAuthRequest.getEmail()))
+                .token(jwtTokenUtil.generateToken(userAuthRequest.getUsername()))
+                .user(userMapper.toResponse(optionalUser.get()))
                 .build();
     }
 

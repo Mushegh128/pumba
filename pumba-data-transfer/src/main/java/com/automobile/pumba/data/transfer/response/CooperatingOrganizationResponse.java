@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserRegistrationResponse {
+public class CooperatingOrganizationResponse {
 
-    private String lastName;
-    private String firstName;
-    private String email;
+    private String name;
+    private String logo;
+    private String description;
+    private String website;
 }

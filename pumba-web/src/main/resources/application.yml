@@ -22,3 +22,8 @@ springdoc:
 jwt:
   secret: k205j@dkjf0%^@
   expiration: 330000
+
+pumba:
+  path:
+    image:
+      cooperating-organization: E:\pumba

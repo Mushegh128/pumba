@@ -54,7 +54,7 @@ public class Car extends AbstractEntity {
     private CarDrivetrainType drivetrainType;
     private String description;
 
-    private String place; // todo sa petq e aveli chkun darna
+    private String place;
     private boolean inAuction;
     private boolean hasArrived;
 
