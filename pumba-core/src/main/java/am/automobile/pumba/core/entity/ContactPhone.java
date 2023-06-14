@@ -15,10 +15,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "car_fuel_type")
-public class CarFuelType extends AbstractEntity {
+@Table(name = "contact_phone")
+public class ContactPhone extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
+    private String phone;
+    @Column(nullable = false)
     private String name;
-    private String description;
 }

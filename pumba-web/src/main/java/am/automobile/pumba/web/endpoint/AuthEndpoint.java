@@ -44,6 +44,12 @@ public class AuthEndpoint {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> changePassword() {
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/validate")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> validateToken() {

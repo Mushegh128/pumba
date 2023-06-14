@@ -18,12 +18,6 @@ import lombok.ToString;
 @Table(name = "car_make")
 public class CarMake extends AbstractEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
-    private String country;
-    private Integer yearFounded;
-    private String founder;
-    private String logo;
-    private String headquarters;
-    private String website;
 }

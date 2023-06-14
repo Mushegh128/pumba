@@ -3,8 +3,8 @@ package am.automobile.pumba.core.service;
 import am.automobile.pumba.core.entity.User;
 import com.automobile.pumba.data.transfer.model.UserPermission;
 import com.automobile.pumba.data.transfer.model.UserRole;
-import com.automobile.pumba.data.transfer.request.UserInfoUpdateRequest;
-import com.automobile.pumba.data.transfer.response.UserResponse;
+import com.automobile.pumba.data.transfer.request.UserProfileDetailsRequest;
+import com.automobile.pumba.data.transfer.response.UserProfileDetailsResponse;
 
 import java.util.List;
 
@@ -41,8 +41,7 @@ public interface UserService {
 
     void unblock(long userId);
 
-    void updateUserInfo(long userId, UserInfoUpdateRequest userInfoUpdateRequest);
+    User getCurrentUser();
 
-    UserResponse getCurrentUser();
-
+    UserProfileDetailsResponse changeProfileDetailsRequest(UserProfileDetailsRequest userProfileDetailsRequest);
 }

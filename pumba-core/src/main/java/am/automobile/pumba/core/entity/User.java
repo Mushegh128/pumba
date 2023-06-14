@@ -28,12 +28,18 @@ import java.util.Set;
 @Table(name = "user")
 public class User extends AbstractEntity {
 
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private String phone;
+    private String aboutUser;
+    private String avatar;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)

@@ -1,5 +1,6 @@
 package com.automobile.pumba.data.transfer.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,16 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoUpdateRequest {
+public class UserProfileDetailsRequest {
 
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
-    private String email;
+    @NotBlank
     private String phone;
+    @NotBlank
+    private String avatar;
+    @NotBlank
+    private String aboutUser;
 }

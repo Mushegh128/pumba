@@ -1,5 +1,6 @@
 package am.automobile.pumba.core.entity;
 
+import com.automobile.pumba.data.transfer.model.CarTracking;
 import com.automobile.pumba.data.transfer.model.MileageType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,14 +28,17 @@ import java.time.LocalDate;
 @Table(name = "car")
 public class Car extends AbstractEntity {
 
+    @Column(nullable = false)
+    private String title;
     @ManyToOne
     private CarMake make;
     @ManyToOne
     private CarModel model;
-    private int year;
+    private Integer year;
     private String color;
+    private Integer cylinders;
 
-    private int mileage;
+    private Integer mileage;
     @Enumerated(EnumType.STRING)
     private MileageType mileageType;
     private BigDecimal price;
@@ -43,8 +47,8 @@ public class Car extends AbstractEntity {
 
     @ManyToOne
     private CarFuelType fuelType;
-    private int numberOfDoors;
-    private int numberOfSeats;
+    private Integer numberOfDoors;
+    private Integer numberOfSeats;
     @ManyToOne
     private CarTransmissionType transmission;
 
@@ -52,11 +56,17 @@ public class Car extends AbstractEntity {
     private CarEngineType engineType;
     @ManyToOne
     private CarDrivetrainType drivetrainType;
+    @ManyToOne
+    private ContactPhone contactPhone;
+    @ManyToOne
+    private ContactEmail contactEmail;
     private String description;
 
-    private String place;
-    private boolean inAuction;
-    private boolean hasArrived;
+    private String location;
+    private String videoLink;
+    private String baseImage;
+    @Enumerated(EnumType.STRING)
+    private CarTracking tracking;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
@@ -66,5 +76,6 @@ public class Car extends AbstractEntity {
     @Column(name = "update_at")
     private LocalDate updateAt;
 
-    private boolean isPublic;
+    private Boolean isPublic;
+    private Boolean isApproved;
 }

@@ -19,6 +19,8 @@ public class UserResponse {
     private String lastName;
     private String email;
     private String phone;
+    private String aboutUser;
+    private String avatar;
     private UserRole role;
     private Set<UserPermission> permissions;
 }

@@ -27,6 +27,7 @@ public class CooperatingOrganizationServiceImpl implements CooperatingOrganizati
     @Value("${pumba.path.image.cooperating-organization}")
     private String folderPath;
 
+    // todo steghic petq e hanel nkar save enely vordev stegh ira teghy che
     @Override
     public CooperatingOrganizationResponse create(CooperatingOrganizationRequest cooperatingOrganizationRequest) {
         log.debug("Creating cooperating organization: {}", cooperatingOrganizationRequest);

@@ -27,6 +27,9 @@ public class UserRegistrationRequest {
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
     private String firstName;
 
+    @NotBlank
+    private String phone;
+
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;

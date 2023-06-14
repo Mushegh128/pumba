@@ -52,7 +52,6 @@ public class IOUtil {
             try {
                 file.transferTo(newFile);
             } catch (IOException e) {
-                log.error("Failed to save image with filename: {}", file.getName());
                 throw new FileNotExistException("Failed to save image with filename: " + fileName);
             }
             return fileName;
