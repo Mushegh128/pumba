@@ -37,6 +37,7 @@ public class CarResponse {
     private String videoLink;
     private String baseImage;
     private CarTracking tracking;
+    private Boolean isPublic;
     private Integer numberOfDoors;
     private Integer numberOfSeats;
 }

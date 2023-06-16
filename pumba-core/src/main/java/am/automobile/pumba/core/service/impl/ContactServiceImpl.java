@@ -2,6 +2,7 @@ package am.automobile.pumba.core.service.impl;
 
 import am.automobile.pumba.core.entity.ContactEmail;
 import am.automobile.pumba.core.entity.ContactPhone;
+import am.automobile.pumba.core.exception.EntityNotFoundException;
 import am.automobile.pumba.core.mapper.ContactEmailMapper;
 import am.automobile.pumba.core.mapper.ContactPhoneMapper;
 import am.automobile.pumba.core.repository.ContactEmailRepository;
@@ -41,5 +42,19 @@ public class ContactServiceImpl implements ContactService {
         return contactPhones.stream()
                 .map(contactPhoneMapper::toResponse)
                 .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public ContactPhone findContactPhoneById(long id) {
+        log.info("Find contactPhone by ID: {}", id);
+        return contactPhoneRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ContactPhone with id: " + id + " not found"));
+    }
+
+    @Override
+    public ContactEmail findContactEmailById(long id) {
+        log.info("Find contactEmail by ID: {}", id);
+        return contactEmailRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ContactEmail with id: " + id + " not found"));
     }
 }

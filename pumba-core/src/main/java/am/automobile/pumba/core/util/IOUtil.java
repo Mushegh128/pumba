@@ -36,6 +36,10 @@ public class IOUtil {
         }
     }
 
+    public byte[] getAllBytesByUrl(String path, String fileName) {
+        return getAllBytesByUrl(path + File.separator + fileName);
+    }
+
     /**
      * Saves a file to the specified path.
      *

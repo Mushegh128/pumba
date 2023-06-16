@@ -27,4 +27,5 @@ pumba:
   path:
     image:
       cooperating-organization: E:\pumba
-      car: E:\pumba
+      car: E:\
+  baseUrl: http://localhost:8080/api

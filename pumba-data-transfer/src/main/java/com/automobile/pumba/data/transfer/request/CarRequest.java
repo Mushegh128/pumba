@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -51,8 +52,10 @@ public class CarRequest {
     private String description;
     private String location;
     private String videoLink;
+    private Boolean isPublic;
     @NotBlank
     private String baseImage;
+    private List<String> imagesDetails;
     @Enumerated(EnumType.STRING)
     private CarTracking tracking;
     @Min(value = 1)

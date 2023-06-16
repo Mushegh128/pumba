@@ -6,6 +6,7 @@ import com.automobile.pumba.data.transfer.request.CarRequest;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
 
     private final ModelMapper modelMapper;
+
+    @Value("${pumba.baseUrl}")
+    private String baseUrl;
 
     @Override
     public Car toEntity(CarRequest carRequest) {
@@ -40,9 +44,9 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
         carResponse.setTransmission(car.getTransmission() != null ? car.getTransmission().getId() : null);
         carResponse.setEngineType(car.getEngineType() != null ? car.getEngineType().getId() : null);
         carResponse.setDrivetrainType(car.getDrivetrainType() != null ? car.getDrivetrainType().getId() : null);
-        carResponse.setDrivetrainType(car.getContactPhone() != null ? car.getContactPhone().getId() : null);
-        carResponse.setDrivetrainType(car.getContactEmail() != null ? car.getContactEmail().getId() : null);
-
+        carResponse.setContactPhone(car.getContactPhone() != null ? car.getContactPhone().getId() : null);
+        carResponse.setContactEmail(car.getContactEmail() != null ? car.getContactEmail().getId() : null);
+        carResponse.setBaseImage(baseUrl + "/car/image/" + car.getBaseImage());
         return carResponse;
     }
 }
