@@ -1,7 +1,10 @@
 package am.automobile.pumba.web.endpoint;
 
+import am.automobile.pumba.core.entity.Car;
+import am.automobile.pumba.core.mapper.CarMapper;
 import am.automobile.pumba.core.service.CarService;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
+import com.automobile.pumba.data.transfer.request.CarFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarRequest;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import jakarta.validation.Valid;
@@ -9,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CarEndpoint {
 
     private final CarService carService;
+    private final CarMapper carMapper;
 
     @PostMapping
     public ResponseEntity<CarResponse> createCar(@Valid @RequestBody CarRequest carRequest) {
@@ -41,14 +46,31 @@ public class CarEndpoint {
 
     @GetMapping("/image/{fileName}")
     public ResponseEntity<byte[]> createCar(@PathVariable String fileName) {
-        return ResponseEntity.ok(carService.getImage(fileName));
+        byte[] image = carService.getImage(fileName);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .contentLength(image.length)
+                .body(image);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/admin")
+    @PostMapping("/admin/filter")
     public ResponseEntity<?> findAll(
             @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             @RequestBody CarAdminFilterRequest carFilterRequest) {
         return ResponseEntity.ok(carService.findAllForAdmin(pageable, carFilterRequest));
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<?> findAllFilter(
+            @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestBody CarFilterRequest carFilterRequest) {
+        return ResponseEntity.ok(carService.findAllFilter(pageable, carFilterRequest));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Car car = carService.findById(id);
+        return ResponseEntity.ok(carMapper.toResponse(car));
     }
 }

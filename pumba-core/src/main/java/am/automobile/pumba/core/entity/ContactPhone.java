@@ -22,4 +22,5 @@ public class ContactPhone extends AbstractEntity {
     private String phone;
     @Column(nullable = false)
     private String name;
+    private Boolean whatsapp;
 }

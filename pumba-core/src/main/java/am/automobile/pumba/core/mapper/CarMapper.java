@@ -33,8 +33,6 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
                     mapper.map(src -> src.getTransmission().getId(), CarResponse::setTransmission);
                     mapper.map(src -> src.getEngineType().getId(), CarResponse::setEngineType);
                     mapper.map(src -> src.getDrivetrainType().getId(), CarResponse::setDrivetrainType);
-                    mapper.map(src -> src.getContactPhone().getId(), CarResponse::setContactPhone);
-                    mapper.map(src -> src.getContactEmail().getId(), CarResponse::setContactEmail);
                 });
 
         CarResponse carResponse = modelMapper.map(car, CarResponse.class);
@@ -44,8 +42,6 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
         carResponse.setTransmission(car.getTransmission() != null ? car.getTransmission().getId() : null);
         carResponse.setEngineType(car.getEngineType() != null ? car.getEngineType().getId() : null);
         carResponse.setDrivetrainType(car.getDrivetrainType() != null ? car.getDrivetrainType().getId() : null);
-        carResponse.setContactPhone(car.getContactPhone() != null ? car.getContactPhone().getId() : null);
-        carResponse.setContactEmail(car.getContactEmail() != null ? car.getContactEmail().getId() : null);
         carResponse.setBaseImage(baseUrl + "/car/image/" + car.getBaseImage());
         return carResponse;
     }

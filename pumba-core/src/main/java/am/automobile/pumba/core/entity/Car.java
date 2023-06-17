@@ -1,6 +1,7 @@
 package am.automobile.pumba.core.entity;
 
 import com.automobile.pumba.data.transfer.model.CarTracking;
+import com.automobile.pumba.data.transfer.model.ConditionType;
 import com.automobile.pumba.data.transfer.model.MileageType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -36,6 +38,7 @@ public class Car extends AbstractEntity {
     private User owner;
     @Column(nullable = false)
     private String title;
+    private String subTitle;
     @ManyToOne
     private CarMake make;
     @ManyToOne
@@ -67,6 +70,9 @@ public class Car extends AbstractEntity {
     @ManyToOne
     private ContactEmail contactEmail;
     private String description;
+    private String engineSize;
+    @Enumerated(EnumType.STRING)
+    private ConditionType conditionType;
 
     private String location;
     private String videoLink;
@@ -78,7 +84,7 @@ public class Car extends AbstractEntity {
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
-    private LocalDate createAt;
+    private LocalDateTime createAt;
 
     @UpdateTimestamp
     @Column(name = "update_at")

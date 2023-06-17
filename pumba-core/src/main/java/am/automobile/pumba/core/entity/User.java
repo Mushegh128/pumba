@@ -17,6 +17,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -43,7 +44,7 @@ public class User extends AbstractEntity {
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
-    private LocalDate createAt;
+    private LocalDateTime createAt;
     private boolean isEnable;
 
     private boolean isBlocked;

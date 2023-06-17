@@ -1,6 +1,7 @@
 package com.automobile.pumba.data.transfer.request;
 
 import com.automobile.pumba.data.transfer.model.CarTracking;
+import com.automobile.pumba.data.transfer.model.ConditionType;
 import com.automobile.pumba.data.transfer.model.MileageType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +23,7 @@ public class CarRequest {
 
     @NotBlank
     private String title;
+    private String subTitle;
     @Min(value = 1)
     private Long carMake;
     @Min(value = 1)
@@ -58,6 +60,9 @@ public class CarRequest {
     private List<String> imagesDetails;
     @Enumerated(EnumType.STRING)
     private CarTracking tracking;
+    @Enumerated(EnumType.STRING)
+    private ConditionType conditionType;
+    private String engineSize;
     @Min(value = 1)
     private Integer numberOfDoors;
     private Integer numberOfSeats;

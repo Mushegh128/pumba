@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 public class OrderMapper implements BaseMapper<Order, OrderRequest, OrderResponse> {
 
     private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
+    private final CarMapper carMapper;
 
     @Override
     public Order toEntity(OrderRequest orderRequest) {
@@ -21,6 +23,11 @@ public class OrderMapper implements BaseMapper<Order, OrderRequest, OrderRespons
 
     @Override
     public OrderResponse toResponse(Order order) {
-        return modelMapper.map(order, OrderResponse.class);
+        OrderResponse orderResponse = modelMapper.map(order, OrderResponse.class);
+        if (order.getManager() != null) {
+            orderResponse.setManager(userMapper.toResponse(order.getManager()));
+        }
+        orderResponse.setCar(carMapper.toResponse(order.getCar()));
+        return orderResponse;
     }
 }

@@ -1,7 +1,12 @@
 package am.automobile.pumba.core.entity;
 
+import com.automobile.pumba.data.transfer.model.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +15,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,19 +28,31 @@ public class Order extends AbstractEntity {
 
     private String firstName;
     private String lastName;
+    private String companyName;
+    private String country;
+    private String streetAddress;
+    private String address;
+    private String postcodeZip;
+    private String city;
+    private String province;
+    private String phoneNumber;
     private String email;
     private String message;
-    private String phoneNumber;
-    private String ipAddress;
-    private String userAgent;
 
-    private boolean isDeleted;
-    private LocalDateTime deletedAt;
+    @ManyToOne
+    private User manager;
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
+    private Car car;
 
-    private boolean isBin;
-    private LocalDateTime binAt;
+    @ManyToOne
+    @JoinColumn(updatable = false, nullable = false)
+    private IpAddress ipAddress;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @CreationTimestamp
-    @Column(name = "create_at", nullable = false, updatable = false)
-    private LocalDate createAt;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createAt;
 }

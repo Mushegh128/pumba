@@ -1,7 +1,7 @@
 package am.automobile.pumba.core.specifications;
 
 import am.automobile.pumba.core.entity.User;
-import am.automobile.pumba.core.specifications.filter.CarFilterSpecifications;
+import am.automobile.pumba.core.specifications.filter.CarAdminFilterSpecifications;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record CarAdminSpecifications<T>(CarAdminFilterRequest carFilterRequest,
-                                        User user) implements Specification<T>, CarFilterSpecifications<T> {
+                                        User user) implements Specification<T>, CarAdminFilterSpecifications<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {

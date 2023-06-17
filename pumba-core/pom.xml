@@ -58,9 +58,5 @@
             <version>0.9.1</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-        </dependency>
     </dependencies>
 </project>

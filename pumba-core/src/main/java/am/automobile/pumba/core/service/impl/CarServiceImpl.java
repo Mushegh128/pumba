@@ -19,8 +19,10 @@ import am.automobile.pumba.core.service.CarService;
 import am.automobile.pumba.core.service.ContactService;
 import am.automobile.pumba.core.service.UserService;
 import am.automobile.pumba.core.specifications.CarAdminSpecifications;
+import am.automobile.pumba.core.specifications.CarSpecifications;
 import am.automobile.pumba.core.util.IOUtil;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
+import com.automobile.pumba.data.transfer.request.CarFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarRequest;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import lombok.RequiredArgsConstructor;
@@ -122,6 +124,19 @@ public class CarServiceImpl implements CarService {
             User currentUser = userService.getCurrentUser();
             CarAdminSpecifications<Car> filterSpecifications = new CarAdminSpecifications<>(carFilterRequest, currentUser);
 
+            carPage = carRepository.findAll(filterSpecifications, pageable);
+        }
+        return carPage.map(carMapper::toResponse);
+    }
+
+    @Override
+    public Page<CarResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest) {
+
+        Page<Car> carPage;
+        if (carFilterRequest != null && carFilterRequest.isEmpty()) {
+            carPage = carRepository.findAll(pageable);
+        } else {
+            CarSpecifications<Car> filterSpecifications = new CarSpecifications<>(carFilterRequest);
             carPage = carRepository.findAll(filterSpecifications, pageable);
         }
         return carPage.map(carMapper::toResponse);

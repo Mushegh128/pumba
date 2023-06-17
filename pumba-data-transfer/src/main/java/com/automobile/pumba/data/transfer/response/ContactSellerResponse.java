@@ -5,14 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ContactPhoneResponse {
+public class ContactSellerResponse {
 
-    private Long id;
-    private String phone;
     private String name;
-    private Boolean whatsapp;
+    private String phone;
+    private String email;
+    private String message;
+    private LocalDateTime createAt;
+    private CarResponse car;
 }
