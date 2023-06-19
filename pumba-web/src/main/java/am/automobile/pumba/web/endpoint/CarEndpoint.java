@@ -2,6 +2,7 @@ package am.automobile.pumba.web.endpoint;
 
 import am.automobile.pumba.core.entity.Car;
 import am.automobile.pumba.core.mapper.CarMapper;
+import am.automobile.pumba.core.service.CarImageService;
 import am.automobile.pumba.core.service.CarService;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarFilterRequest;
@@ -19,11 +20,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,11 +36,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class CarEndpoint {
 
     private final CarService carService;
+    private final CarImageService carImageService;
     private final CarMapper carMapper;
 
     @PostMapping
     public ResponseEntity<CarResponse> createCar(@Valid @RequestBody CarRequest carRequest) {
         return ResponseEntity.ok(carService.createCar(carRequest));
+    }
+
+    @PutMapping("/{carId}")
+    public ResponseEntity<CarResponse> editCar(@Valid @RequestBody CarRequest carRequest, @PathVariable long carId) {
+        return ResponseEntity.ok(carService.editCar(carRequest, carId));
     }
 
     @PostMapping("/image")
@@ -72,5 +82,10 @@ public class CarEndpoint {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Car car = carService.findById(id);
         return ResponseEntity.ok(carMapper.toResponse(car));
+    }
+
+    @GetMapping("/images/details-url/{id}")
+    public ResponseEntity<List<String>> findAllDetailsImagesByCarId(@PathVariable Long id) {
+        return ResponseEntity.ok(carImageService.findAllUrlByCarId(id));
     }
 }

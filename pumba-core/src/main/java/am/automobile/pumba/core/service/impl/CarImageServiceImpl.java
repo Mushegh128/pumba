@@ -8,11 +8,13 @@ import am.automobile.pumba.core.service.CarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,6 +22,9 @@ import java.util.List;
 public class CarImageServiceImpl implements CarImageService {
 
     private final CarImageRepository carImageRepository;
+
+    @Value("${pumba.baseUrl}")
+    private String baseUrl;
     @Autowired
     @Lazy
     private CarService carService;
@@ -37,5 +42,12 @@ public class CarImageServiceImpl implements CarImageService {
         }
 
         carImageRepository.saveAll(carImages);
+    }
+
+    @Override
+    public List<String> findAllUrlByCarId(long carId) {
+        return carImageRepository.findAllByCar_Id(carId)
+                .stream().map(carImage -> baseUrl + "/car/image/" + carImage.getImageUrl())
+                .collect(Collectors.toList());
     }
 }

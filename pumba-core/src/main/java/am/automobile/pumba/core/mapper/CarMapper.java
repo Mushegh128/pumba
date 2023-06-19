@@ -45,4 +45,8 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
         carResponse.setBaseImage(baseUrl + "/car/image/" + car.getBaseImage());
         return carResponse;
     }
+
+    public void updateFromRequest(CarRequest carRequest, Car car) {
+        modelMapper.map(carRequest, car);
+    }
 }

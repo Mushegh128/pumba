@@ -18,7 +18,6 @@ public class UserProfileDetailsUpdateMapper implements BaseMapper<User, UserProf
         modelMapper.map(dto, user);
     }
 
-
     @Override
     public User toEntity(UserProfileDetailsRequest userProfileDetailsRequest) {
         return modelMapper.map(userProfileDetailsRequest, User.class);

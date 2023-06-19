@@ -54,47 +54,34 @@ public class CarServiceImpl implements CarService {
         Car car = carMapper.toEntity(carRequest);
         User currentUser = userService.getCurrentUser();
         car.setOwner(currentUser);
-        if (carRequest.getCarMake() != null) {
-            CarMake carMakeById = carMetaDataService.findCarMakeById(carRequest.getCarMake());
-            car.setMake(carMakeById);
-        }
-        if (carRequest.getCarModel() != null) {
-            CarModel carModelById = carMetaDataService.findCarModelById(carRequest.getCarModel());
-            car.setModel(carModelById);
-        }
-        if (carRequest.getFuelType() != null) {
-            CarFuelType carFuelTypeById = carMetaDataService.findCarFuelTypeById(carRequest.getFuelType());
-            car.setFuelType(carFuelTypeById);
-        }
-        if (carRequest.getTransmission() != null) {
-            CarTransmissionType carTransmissionTypeById = carMetaDataService.findCarTransmissionTypeById(carRequest.getTransmission());
-            car.setTransmission(carTransmissionTypeById);
-        }
-        if (carRequest.getEngineType() != null) {
-            CarEngineType carEngineTypeById = carMetaDataService.findCarEngineTypeById(carRequest.getEngineType());
-            car.setEngineType(carEngineTypeById);
-        }
-        if (carRequest.getDrivetrainType() != null) {
-            CarDrivetrainType carDrivetrainTypeById = carMetaDataService.findCarDrivetrainTypeById(carRequest.getDrivetrainType());
-            car.setDrivetrainType(carDrivetrainTypeById);
-        }
-        if (carRequest.getContactPhone() != null) {
-            ContactPhone contactPhoneById = contactService.findContactPhoneById(carRequest.getContactPhone());
-            car.setContactPhone(contactPhoneById);
-        }
-        if (carRequest.getContactEmail() != null) {
-            ContactEmail contactEmailById = contactService.findContactEmailById(carRequest.getContactEmail());
-            car.setContactEmail(contactEmailById);
-        }
+
+        updateCarAttributes(car, carRequest);
 
         if (carRequest.getIsPublic() == null) {
             car.setIsPublic(false);
         }
         car.setIsApproved(false);
         Car save = carRepository.save(car);
+
         if (carRequest.getImagesDetails() != null && carRequest.getImagesDetails().size() > 0) {
             carImageService.saveAll(car.getId(), carRequest.getImagesDetails());
         }
+
+        return carMapper.toResponse(save);
+    }
+
+    @Override
+    public CarResponse editCar(CarRequest carRequest, long carId) {
+        Car car = findById(carId);
+
+        updateCarAttributes(car, carRequest);
+
+        Car save = carRepository.save(car);
+
+        if (carRequest.getImagesDetails() != null && carRequest.getImagesDetails().size() > 0) {
+            carImageService.saveAll(car.getId(), carRequest.getImagesDetails());
+        }
+
         return carMapper.toResponse(save);
     }
 
@@ -140,5 +127,42 @@ public class CarServiceImpl implements CarService {
             carPage = carRepository.findAll(filterSpecifications, pageable);
         }
         return carPage.map(carMapper::toResponse);
+    }
+
+    private void updateCarAttributes(Car car, CarRequest carRequest) {
+        carMapper.updateFromRequest(carRequest, car);
+
+        if (carRequest.getCarMake() != null) {
+            CarMake carMakeById = carMetaDataService.findCarMakeById(carRequest.getCarMake());
+            car.setMake(carMakeById);
+        }
+        if (carRequest.getCarModel() != null) {
+            CarModel carModelById = carMetaDataService.findCarModelById(carRequest.getCarModel());
+            car.setModel(carModelById);
+        }
+        if (carRequest.getFuelType() != null) {
+            CarFuelType carFuelTypeById = carMetaDataService.findCarFuelTypeById(carRequest.getFuelType());
+            car.setFuelType(carFuelTypeById);
+        }
+        if (carRequest.getTransmission() != null) {
+            CarTransmissionType carTransmissionTypeById = carMetaDataService.findCarTransmissionTypeById(carRequest.getTransmission());
+            car.setTransmission(carTransmissionTypeById);
+        }
+        if (carRequest.getEngineType() != null) {
+            CarEngineType carEngineTypeById = carMetaDataService.findCarEngineTypeById(carRequest.getEngineType());
+            car.setEngineType(carEngineTypeById);
+        }
+        if (carRequest.getDrivetrainType() != null) {
+            CarDrivetrainType carDrivetrainTypeById = carMetaDataService.findCarDrivetrainTypeById(carRequest.getDrivetrainType());
+            car.setDrivetrainType(carDrivetrainTypeById);
+        }
+        if (carRequest.getContactPhone() != null) {
+            ContactPhone contactPhoneById = contactService.findContactPhoneById(carRequest.getContactPhone());
+            car.setContactPhone(contactPhoneById);
+        }
+        if (carRequest.getContactEmail() != null) {
+            ContactEmail contactEmailById = contactService.findContactEmailById(carRequest.getContactEmail());
+            car.setContactEmail(contactEmailById);
+        }
     }
 }

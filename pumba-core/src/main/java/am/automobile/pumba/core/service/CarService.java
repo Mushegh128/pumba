@@ -20,5 +20,8 @@ public interface CarService {
     Car findById(long id);
 
     Page<CarResponse> findAllForAdmin(Pageable pageable, CarAdminFilterRequest carFilterRequest);
+
     Page<CarResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest);
+
+    CarResponse editCar(CarRequest carRequest, long carId);
 }
