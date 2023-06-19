@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class ContactSellerMapper implements BaseMapper<ContactSeller, ContactSellerRequest, ContactSellerResponse> {
 
     private final ModelMapper modelMapper;
+    private final CarMapper carMapper;
 
     @Override
     public ContactSeller toEntity(ContactSellerRequest contactSellerRequest) {
@@ -21,6 +22,12 @@ public class ContactSellerMapper implements BaseMapper<ContactSeller, ContactSel
 
     @Override
     public ContactSellerResponse toResponse(ContactSeller contactSeller) {
-        return modelMapper.map(contactSeller, ContactSellerResponse.class);
+
+        ContactSellerResponse contactSellerResponse = modelMapper.map(contactSeller, ContactSellerResponse.class);
+        if (contactSeller.getCar() != null) {
+            contactSellerResponse.setCar(carMapper.toResponse(contactSeller.getCar()));
+        }
+        contactSellerResponse.setCar(carMapper.toResponse(contactSeller.getCar()));
+        return contactSellerResponse;
     }
 }
