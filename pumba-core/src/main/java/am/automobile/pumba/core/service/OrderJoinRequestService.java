@@ -9,5 +9,5 @@ public interface OrderJoinRequestService {
 
     void approveOrderRequest(long orderJoinRequestId);
 
-    void canselOrderRequest(long orderJoinRequestId);
+    void cancelOrderRequest(long orderJoinRequestId);
 }

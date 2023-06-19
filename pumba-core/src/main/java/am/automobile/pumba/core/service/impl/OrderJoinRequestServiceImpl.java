@@ -33,7 +33,7 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
                 .requestSenderUser(user)
                 .order(order)
                 .approve(false)
-                .cansel(false)
+                .cancel(false)
                 .build();
         orderJoinRequestRepository.save(joinRequest);
     }
@@ -41,7 +41,7 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
     @Override
     @Transactional
     public void approveOrderRequest(long orderJoinRequestId) {
-        OrderJoinRequest orderJoinRequest = findByIdAndApproveFalseAndCanselFalse(orderJoinRequestId);
+        OrderJoinRequest orderJoinRequest = findByIdAndApproveFalseAndCancelFalse(orderJoinRequestId);
         orderJoinRequest.setApprove(true);
         orderJoinRequest.setApproveAt(LocalDateTime.now());
         orderJoinRequestRepository.save(orderJoinRequest);
@@ -49,7 +49,7 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
         order.setManager(orderJoinRequest.getRequestSenderUser());
 
         List<OrderJoinRequest> orderAllJoinRequestsByOrderId = orderJoinRequestRepository
-                .findAllByIdLessThanEqualAndApproveFalseAndCanselFalse(orderJoinRequestId);
+                .findByIdNotAndApproveFalseAndCancelFalse(orderJoinRequestId);
 
         if (orderAllJoinRequestsByOrderId.isEmpty()) {
             return;
@@ -57,8 +57,8 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
 
         orderAllJoinRequestsByOrderId = orderAllJoinRequestsByOrderId.stream()
                 .peek(joinRequest -> {
-                    joinRequest.setCansel(false);
-                    joinRequest.setCanselAt(LocalDateTime.now());
+                    joinRequest.setCancel(false);
+                    joinRequest.setCancelAt(LocalDateTime.now());
                 })
                 .collect(Collectors.toList());
 
@@ -66,20 +66,20 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
     }
 
     @Override
-    public void canselOrderRequest(long orderJoinRequestId) {
-        OrderJoinRequest orderJoinRequest = findByIdAndApproveFalseAndCanselFalse(orderJoinRequestId);
-        orderJoinRequest.setCansel(true);
-        orderJoinRequest.setCanselAt(LocalDateTime.now());
+    public void cancelOrderRequest(long orderJoinRequestId) {
+        OrderJoinRequest orderJoinRequest = findByIdAndApproveFalseAndCancelFalse(orderJoinRequestId);
+        orderJoinRequest.setCancel(true);
+        orderJoinRequest.setCancelAt(LocalDateTime.now());
         orderJoinRequestRepository.save(orderJoinRequest);
     }
 
     private Optional<OrderJoinRequest> findByOrderIdAndUserId(long orderId, long userId) {
-        return orderJoinRequestRepository.findByOrder_IdAndRequestSenderUser_IdAndApproveFalseAndCanselFalse(orderId, userId);
+        return orderJoinRequestRepository.findByOrder_IdAndRequestSenderUser_IdAndApproveFalseAndCancelFalse(orderId, userId);
 
     }
 
-    private OrderJoinRequest findByIdAndApproveFalseAndCanselFalse(long id) {
-        return orderJoinRequestRepository.findByIdAndApproveFalseAndCanselFalse(id).orElseThrow(() -> {
+    private OrderJoinRequest findByIdAndApproveFalseAndCancelFalse(long id) {
+        return orderJoinRequestRepository.findByIdAndApproveFalseAndCancelFalse(id).orElseThrow(() -> {
             throw new EntityNotFoundException("NOT FOUND");
         });
     }

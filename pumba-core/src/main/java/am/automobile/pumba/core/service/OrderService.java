@@ -6,6 +6,7 @@ import am.automobile.pumba.core.entity.User;
 import com.automobile.pumba.data.transfer.model.OrderStatus;
 import com.automobile.pumba.data.transfer.request.OrderFilterRequest;
 import com.automobile.pumba.data.transfer.request.OrderRequest;
+import com.automobile.pumba.data.transfer.response.OrderHistoryResponse;
 import com.automobile.pumba.data.transfer.response.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,6 @@ public interface OrderService {
     Page<OrderResponse> findAll(Pageable pageable, OrderFilterRequest orderFilterRequest);
 
     void joinOrderManager(long orderId, User currentUser);
+
+    OrderHistoryResponse findAllHistoryByOrderId(Long orderId);
 }

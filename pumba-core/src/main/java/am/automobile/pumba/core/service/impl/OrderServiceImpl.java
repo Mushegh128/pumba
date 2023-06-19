@@ -6,7 +6,10 @@ import am.automobile.pumba.core.entity.Order;
 import am.automobile.pumba.core.entity.OrderStatusHistory;
 import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.exception.EntityNotFoundException;
+import am.automobile.pumba.core.mapper.OrderJoinRequestMapper;
 import am.automobile.pumba.core.mapper.OrderMapper;
+import am.automobile.pumba.core.mapper.OrderStatusHistoryMapper;
+import am.automobile.pumba.core.repository.OrderJoinRequestRepository;
 import am.automobile.pumba.core.repository.OrderRepository;
 import am.automobile.pumba.core.repository.OrderStatusHistoryRepository;
 import am.automobile.pumba.core.service.CarService;
@@ -17,13 +20,20 @@ import com.automobile.pumba.data.transfer.model.OrderStatus;
 import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.OrderFilterRequest;
 import com.automobile.pumba.data.transfer.request.OrderRequest;
+import com.automobile.pumba.data.transfer.response.OrderHistoryResponse;
+import com.automobile.pumba.data.transfer.response.OrderJoinRequestResponse;
 import com.automobile.pumba.data.transfer.response.OrderResponse;
+import com.automobile.pumba.data.transfer.response.OrderStatusHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,8 +43,11 @@ public class OrderServiceImpl implements OrderService {
     private final CarService carService;
     private final OrderJoinRequestService orderJoinRequestService;
     private final OrderStatusHistoryRepository orderStatusHistoryRepository;
+    private final OrderJoinRequestRepository orderJoinRequestRepository;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderJoinRequestMapper orderJoinRequestMapper;
+    private final OrderStatusHistoryMapper orderStatusHistoryMapper;
 
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest, IpAddress ipAddress) {
@@ -64,8 +77,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         UserRole currentUserRole = currentUser.getRole();
+        UserRole managerRole = order.getManager() != null ? order.getManager().getRole() : null;
 
-        if (currentUserRole != UserRole.ADMIN && order.getManager().getRole() != currentUserRole) {
+        if (currentUserRole != UserRole.ADMIN &&
+                (managerRole == null || !managerRole.equals(currentUserRole)) &&
+                order.getManager().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException("User does not have access to change the order status.");
         }
 
@@ -83,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderResponse> findAll(Pageable pageable, OrderFilterRequest orderFilterRequest) {
         Page<Order> orderPage;
         if (orderFilterRequest.isEmpty()) {
-            orderPage = orderRepository.findAll(pageable);
+            orderPage = orderRepository.findAllByOrderStatusNot(pageable, OrderStatus.SPAM);
         } else {
             OrderSpecifications<Order> filterSpecifications = new OrderSpecifications<>(orderFilterRequest);
             orderPage = orderRepository.findAll(filterSpecifications, pageable);
@@ -102,5 +118,22 @@ public class OrderServiceImpl implements OrderService {
             throw new AccessDeniedException("User not access for join order with manager");
         }
         orderRepository.save(order);
+    }
+
+    @Override
+    public OrderHistoryResponse findAllHistoryByOrderId(Long orderId) {
+
+        List<OrderStatusHistoryResponse> orderStatusHistoryResponses = orderStatusHistoryRepository.findAllByOrder_IdOrderByCreateAtDesc(orderId).stream()
+                .map(orderStatusHistoryMapper::toResponse)
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        LinkedList<OrderJoinRequestResponse> orderJoinRequestResponses = orderJoinRequestRepository.findAllByOrder_IdOrderByCreateAtDesc(orderId).stream()
+                .map(orderJoinRequestMapper::toResponse)
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        return OrderHistoryResponse.builder()
+                .orderStatusHistories(orderStatusHistoryResponses)
+                .orderJoinRequests(orderJoinRequestResponses)
+                .build();
     }
 }

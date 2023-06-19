@@ -8,9 +8,11 @@ import java.util.Optional;
 
 public interface OrderJoinRequestRepository extends JpaRepository<OrderJoinRequest, Long> {
 
-    Optional<OrderJoinRequest> findByOrder_IdAndRequestSenderUser_IdAndApproveFalseAndCanselFalse(long orderId, long userId);
+    Optional<OrderJoinRequest> findByOrder_IdAndRequestSenderUser_IdAndApproveFalseAndCancelFalse(long orderId, long userId);
 
-    Optional<OrderJoinRequest> findByIdAndApproveFalseAndCanselFalse(long id);
+    Optional<OrderJoinRequest> findByIdAndApproveFalseAndCancelFalse(long id);
 
-    List<OrderJoinRequest> findAllByIdLessThanEqualAndApproveFalseAndCanselFalse(long id);
+    List<OrderJoinRequest> findByIdNotAndApproveFalseAndCancelFalse(long id);
+
+    List<OrderJoinRequest> findAllByOrder_IdOrderByCreateAtDesc(long orderId);
 }

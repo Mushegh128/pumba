@@ -3,6 +3,7 @@ package am.automobile.pumba.core.service.impl;
 import am.automobile.pumba.core.entity.Car;
 import am.automobile.pumba.core.entity.ContactSeller;
 import am.automobile.pumba.core.entity.IpAddress;
+import am.automobile.pumba.core.exception.EntityNotFoundException;
 import am.automobile.pumba.core.mapper.ContactSellerMapper;
 import am.automobile.pumba.core.repository.ContactSellerRepository;
 import am.automobile.pumba.core.service.CarService;
@@ -30,13 +31,27 @@ public class ContactSellerServiceImpl implements ContactSellerService {
         Car car = carService.findById(contactSellerRequest.getCar());
         contactSeller.setIpAddress(ipAddress);
         contactSeller.setCar(car);
+        contactSeller.setIsDelete(false);
         ContactSeller save = contactSellerRepository.save(contactSeller);
         return contactSellerMapper.toResponse(save);
     }
 
     @Override
+    public void deleteById(long id) {
+        ContactSeller seller = findById(id);
+        seller.setIsDelete(true);
+        contactSellerRepository.save(seller);
+    }
+
+    @Override
+    public ContactSeller findById(long id) {
+        return contactSellerRepository.findByIdAndIsDeleteIsFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contact Seller with id: " + id + " not found"));
+    }
+
+    @Override
     public Page<ContactSellerResponse> findAll(Pageable pageable) {
-        Page<ContactSeller> sellers = contactSellerRepository.findAll(pageable);
+        Page<ContactSeller> sellers = contactSellerRepository.findAllByIsDeleteIsFalse(pageable);
         return sellers.map(contactSellerMapper::toResponse);
     }
 }

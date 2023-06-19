@@ -38,6 +38,7 @@ public class ContactSeller extends AbstractEntity {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Car car;
+    private Boolean isDelete;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

@@ -18,10 +18,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -51,23 +53,30 @@ public class OrderEndpoint {
         orderService.joinOrderManager(orderId, currentUser);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR')")
+    @GetMapping("/manager/history/{orderId}")
+    public ResponseEntity<?> findAllOrderHistory(@PathVariable long orderId) {
+        return ResponseEntity.ok(orderService.findAllHistoryByOrderId(orderId));
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/manager/approve/{orderJoinRequestId}")
+
     public void approveOrder(@PathVariable long orderJoinRequestId) {
         orderJoinRequestService.approveOrderRequest(orderJoinRequestId);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     @PostMapping("/manager/change-status/{orderId}")
-    public void changeOrderStatus(@PathVariable long orderId, @RequestBody OrderStatus orderStatus) {
+    public void changeOrderStatus(@PathVariable long orderId, @RequestParam OrderStatus orderStatus) {
         User currentUser = userService.getCurrentUser();
         orderService.changeStatus(orderId, orderStatus, currentUser);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/manager/cansel/{orderJoinRequestId}")
-    public void canselOrder(@PathVariable long orderJoinRequestId) {
-        orderJoinRequestService.canselOrderRequest(orderJoinRequestId);
+    @PostMapping("/manager/can el/{orderJoinRequestId}")
+    public void cancelOrder(@PathVariable long orderJoinRequestId) {
+        orderJoinRequestService.cancelOrderRequest(orderJoinRequestId);
     }
 
     @PostMapping("/list")

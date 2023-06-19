@@ -36,10 +36,10 @@ public class OrderJoinRequest extends AbstractEntity {
     @ManyToOne
     private User requestSenderUser;
     private boolean approve;
-    private boolean cansel;
+    private boolean cancel;
 
     private LocalDateTime approveAt;
-    private LocalDateTime canselAt;
+    private LocalDateTime cancelAt;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
