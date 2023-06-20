@@ -13,5 +13,4 @@ public class CarDrivetrainTypeResponse {
 
     private Long id;
     private String name;
-    private String description;
 }

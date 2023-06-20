@@ -13,5 +13,4 @@ public class CarTransmissionTypeResponse {
 
     private Long id;
     private String name;
-    private String description;
 }

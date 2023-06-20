@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -26,7 +25,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -91,6 +89,6 @@ public class Car extends AbstractEntity {
     private LocalDate updateAt;
 
     private Boolean isPublic;
-    private Boolean requested;
+    private Boolean isRequested;
     private Boolean isApproved;
 }

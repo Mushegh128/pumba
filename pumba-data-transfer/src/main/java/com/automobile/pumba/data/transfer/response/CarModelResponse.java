@@ -13,5 +13,4 @@ public class CarModelResponse {
 
     private Long id;
     private String name;
-    private String description;
 }

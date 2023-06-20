@@ -18,7 +18,6 @@ import lombok.ToString;
 @Table(name = "car_transmission_type")
 public class CarTransmissionType extends AbstractEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
-    private String description;
 }

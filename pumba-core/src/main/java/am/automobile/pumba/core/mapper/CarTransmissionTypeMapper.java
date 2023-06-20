@@ -23,4 +23,8 @@ public class CarTransmissionTypeMapper implements BaseMapper<CarTransmissionType
     public CarTransmissionTypeResponse toResponse(CarTransmissionType carTransmissionType) {
         return modelMapper.map(carTransmissionType, CarTransmissionTypeResponse.class);
     }
+
+    public void updateFromRequest(CarTransmissionTypeRequest carTransmissionTypeRequest, CarTransmissionType carTransmissionType) {
+        modelMapper.map(carTransmissionTypeRequest, carTransmissionType);
+    }
 }

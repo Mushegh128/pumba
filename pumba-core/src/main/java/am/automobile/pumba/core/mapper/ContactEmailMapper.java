@@ -23,4 +23,8 @@ public class ContactEmailMapper implements BaseMapper<ContactEmail, ContactEmail
     public ContactEmailResponse toResponse(ContactEmail contactEmail) {
         return modelMapper.map(contactEmail, ContactEmailResponse.class);
     }
+
+    public void updateFromRequest(ContactEmailRequest contactEmailRequest, ContactEmail contactEmail) {
+        modelMapper.map(contactEmailRequest, contactEmail);
+    }
 }

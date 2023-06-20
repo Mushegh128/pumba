@@ -18,8 +18,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,34 +42,15 @@ public class CarMetadataEndpoint {
         return ResponseEntity.ok(carMetaDataService.createCarDrivetrainType(carDrivetrainTypeRequest));
     }
 
-    @PostMapping("/engine")
-    public ResponseEntity<CarEngineTypeResponse> createCarEngineType(@Valid @RequestBody CarEngineTypeRequest carEngineTypeRequest) {
-        return ResponseEntity.ok(carMetaDataService.createCarEngineType(carEngineTypeRequest));
+    @DeleteMapping("/drivetrain/{id}")
+    public ResponseEntity<?> deleteCarDrivetrainType(@PathVariable long id) {
+        carMetaDataService.deleteCarDrivetrainTypeById(id);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/make")
-    public ResponseEntity<CarMakeResponse> createCarMake(@Valid @RequestBody CarMakeRequest carMakeRequest) {
-        return ResponseEntity.ok(carMetaDataService.createCarMake(carMakeRequest));
-    }
-
-    @PostMapping("/model")
-    public ResponseEntity<CarModelResponse> createCarModel(@Valid @RequestBody CarModelRequest carModelRequest) {
-        return ResponseEntity.ok(carMetaDataService.createCarModel(carModelRequest));
-    }
-
-    @PostMapping("/fuel-type")
-    public ResponseEntity<CarFuelTypeResponse> createCarFuelType(@Valid @RequestBody CarFuelTypeRequest carFuelTypeRequest) {
-        return ResponseEntity.ok(carMetaDataService.createCarFuelType(carFuelTypeRequest));
-    }
-
-    @PostMapping("/transmission")
-    public ResponseEntity<CarTransmissionTypeResponse> createCarTransmissionType(@Valid @RequestBody CarTransmissionTypeRequest carTransmissionTypeRequest) {
-        return ResponseEntity.ok(carMetaDataService.createCarTransmissionType(carTransmissionTypeRequest));
-    }
-
-    @GetMapping({"", "/"})
-    public ResponseEntity<CarMetadataResponse> findAll() {
-        return ResponseEntity.ok(carMetaDataService.findAll());
+    @PutMapping("/drivetrain/{id}")
+    public ResponseEntity<?> updateCarDrivetrainType(@PathVariable long id, @Valid @RequestBody CarDrivetrainTypeRequest carDrivetrainTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.updateCarDrivetrainType(id, carDrivetrainTypeRequest));
     }
 
     @GetMapping("/drivetrain")
@@ -74,9 +58,41 @@ public class CarMetadataEndpoint {
         return ResponseEntity.ok(carMetaDataService.findAllCarDrivetrainTypes());
     }
 
+    @PostMapping("/engine")
+    public ResponseEntity<CarEngineTypeResponse> createCarEngineType(@Valid @RequestBody CarEngineTypeRequest carEngineTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.createCarEngineType(carEngineTypeRequest));
+    }
+
+    @DeleteMapping("/engine/{id}")
+    public ResponseEntity<?> deleteEngine(@PathVariable long id) {
+        carMetaDataService.deleteCarEngineTypeById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/engine/{id}")
+    public ResponseEntity<?> updateEngine(@PathVariable long id, @Valid @RequestBody CarEngineTypeRequest carEngineTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.updateCarEngineType(id, carEngineTypeRequest));
+    }
+
     @GetMapping("/engine")
-    public ResponseEntity<List<CarEngineTypeResponse>> findAllCarEngineTypes() {
+    public ResponseEntity<List<CarEngineTypeResponse>> findAllEngine() {
         return ResponseEntity.ok(carMetaDataService.findAllCarEngineTypes());
+    }
+
+    @PostMapping("/make")
+    public ResponseEntity<CarMakeResponse> createCarMake(@Valid @RequestBody CarMakeRequest carMakeRequest) {
+        return ResponseEntity.ok(carMetaDataService.createCarMake(carMakeRequest));
+    }
+
+    @DeleteMapping("/make/{id}")
+    public ResponseEntity<?> deleteMake(@PathVariable long id) {
+        carMetaDataService.deleteCarMakeById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/make/{id}")
+    public ResponseEntity<?> updateMake(@PathVariable long id, @Valid @RequestBody CarMakeRequest carMakeRequest) {
+        return ResponseEntity.ok(carMetaDataService.updateCarMake(id, carMakeRequest));
     }
 
     @GetMapping("/make")
@@ -84,9 +100,30 @@ public class CarMetadataEndpoint {
         return ResponseEntity.ok(carMetaDataService.findAllCarMakes());
     }
 
+    @PostMapping("/model")
+    public ResponseEntity<CarModelResponse> createCarModel(@Valid @RequestBody CarModelRequest carModelRequest) {
+        return ResponseEntity.ok(carMetaDataService.createCarModel(carModelRequest));
+    }
+
     @GetMapping("/model")
     public ResponseEntity<List<CarModelResponse>> findAllCarModels() {
         return ResponseEntity.ok(carMetaDataService.findAllCarModels());
+    }
+
+    @DeleteMapping("/model/{id}")
+    public ResponseEntity<?> deleteModel(@PathVariable long id) {
+        carMetaDataService.deleteCarModelById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/model/{id}")
+    public ResponseEntity<?> updateModel(@PathVariable long id, @Valid @RequestBody CarModelRequest carModelRequest) {
+        return ResponseEntity.ok(carMetaDataService.updateCarModel(id, carModelRequest));
+    }
+
+    @PostMapping("/fuel-type")
+    public ResponseEntity<CarFuelTypeResponse> createCarFuelType(@Valid @RequestBody CarFuelTypeRequest carFuelTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.createCarFuelType(carFuelTypeRequest));
     }
 
     @GetMapping("/fuel-type")
@@ -94,8 +131,41 @@ public class CarMetadataEndpoint {
         return ResponseEntity.ok(carMetaDataService.findAllCarFuelTypes());
     }
 
+    @DeleteMapping("/fuel-type/{id}")
+    public ResponseEntity<?> deleteFuelType(@PathVariable long id) {
+        carMetaDataService.deleteCarFuelTypeById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/fuel-type/{id}")
+    public ResponseEntity<?> updateFuelType(@PathVariable long id, @Valid @RequestBody CarFuelTypeRequest carFuelTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.updateCarFuelType(id, carFuelTypeRequest));
+    }
+
+    @PostMapping("/transmission")
+    public ResponseEntity<CarTransmissionTypeResponse> createCarTransmissionType(@Valid @RequestBody CarTransmissionTypeRequest carTransmissionTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.createCarTransmissionType(carTransmissionTypeRequest));
+    }
+
     @GetMapping("/transmission")
     public ResponseEntity<List<CarTransmissionTypeResponse>> findAllCarTransmissionTypes() {
         return ResponseEntity.ok(carMetaDataService.findAllCarTransmissionTypes());
     }
+
+    @DeleteMapping("/transmission/{id}")
+    public ResponseEntity<?> deleteTransmission(@PathVariable long id) {
+        carMetaDataService.deleteCarTransmissionTypeById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/transmission/{id}")
+    public ResponseEntity<?> updateTransmission(@PathVariable long id, @Valid @RequestBody CarTransmissionTypeRequest carTransmissionTypeRequest) {
+        return ResponseEntity.ok(carMetaDataService.updateCarTransmissionType(id, carTransmissionTypeRequest));
+    }
+
+    @GetMapping({"", "/"})
+    public ResponseEntity<CarMetadataResponse> findAll() {
+        return ResponseEntity.ok(carMetaDataService.findAll());
+    }
+
 }

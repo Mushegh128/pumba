@@ -23,4 +23,8 @@ public class ContactPhoneMapper implements BaseMapper<ContactPhone, ContactPhone
     public ContactPhoneResponse toResponse(ContactPhone contactPhone) {
         return modelMapper.map(contactPhone, ContactPhoneResponse.class);
     }
+
+    public void updateFromRequest(ContactPhoneRequest contactPhoneRequest, ContactPhone contactPhone) {
+        modelMapper.map(contactPhoneRequest, contactPhone);
+    }
 }

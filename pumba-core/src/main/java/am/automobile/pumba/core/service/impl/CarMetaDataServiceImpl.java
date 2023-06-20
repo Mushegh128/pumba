@@ -18,6 +18,7 @@ import am.automobile.pumba.core.repository.CarEngineTypeRepository;
 import am.automobile.pumba.core.repository.CarFuelTypeRepository;
 import am.automobile.pumba.core.repository.CarMakeRepository;
 import am.automobile.pumba.core.repository.CarModelRepository;
+import am.automobile.pumba.core.repository.CarRepository;
 import am.automobile.pumba.core.repository.CarTransmissionTypeRepository;
 import am.automobile.pumba.core.service.CarMetaDataService;
 import com.automobile.pumba.data.transfer.request.CarDrivetrainTypeRequest;
@@ -36,6 +37,7 @@ import com.automobile.pumba.data.transfer.response.CarTransmissionTypeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +60,7 @@ public class CarMetaDataServiceImpl implements CarMetaDataService {
     private final CarModelRepository carModelRepository;
     private final CarFuelTypeRepository carFuelTypeRepository;
     private final CarTransmissionTypeRepository carTransmissionTypeRepository;
+    private final CarRepository carRepository;
 
     @Override
     public CarDrivetrainTypeResponse createCarDrivetrainType(CarDrivetrainTypeRequest carDrivetrainTypeRequest) {
@@ -203,4 +206,98 @@ public class CarMetaDataServiceImpl implements CarMetaDataService {
                 .orElseThrow(() -> new EntityNotFoundException("CarTransmissionType with id: " + id + " not found"));
     }
 
+    @Override
+    @Transactional
+    public void deleteCarDrivetrainTypeById(long id) {
+        CarDrivetrainType carDrivetrainTypeById = findCarDrivetrainTypeById(id);
+        carRepository.updateDrivetrainTypeToNull(id);
+        carDrivetrainTypeRepository.delete(carDrivetrainTypeById);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCarEngineTypeById(long id) {
+        CarEngineType engineType = findCarEngineTypeById(id);
+        carRepository.updateEngineTypeToNull(id);
+        carEngineTypeRepository.delete(engineType);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCarMakeById(long id) {
+        CarMake carMake = findCarMakeById(id);
+        carRepository.updateMakeToNull(id);
+        carMakeRepository.delete(carMake);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCarModelById(long id) {
+        CarModel carModel = findCarModelById(id);
+        carRepository.updateModelToNull(id);
+        carModelRepository.delete(carModel);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCarFuelTypeById(long id) {
+        CarFuelType carFuelType = findCarFuelTypeById(id);
+        carRepository.updateFuelTypeToNull(id);
+        carFuelTypeRepository.delete(carFuelType);
+    }
+
+    @Override
+    public void deleteCarTransmissionTypeById(long id) {
+        CarTransmissionType carTransmissionType = findCarTransmissionTypeById(id);
+        carRepository.updateTransmissionToNull(id);
+        carTransmissionTypeRepository.delete(carTransmissionType);
+    }
+
+    @Override
+    public CarDrivetrainTypeResponse updateCarDrivetrainType(long id, CarDrivetrainTypeRequest carDrivetrainTypeRequest) {
+        CarDrivetrainType carDrivetrainType = findCarDrivetrainTypeById(id);
+        carDrivetrainTypeMapper.updateFromRequest(carDrivetrainTypeRequest, carDrivetrainType);
+        CarDrivetrainType save = carDrivetrainTypeRepository.save(carDrivetrainType);
+        return carDrivetrainTypeMapper.toResponse(save);
+    }
+
+    @Override
+    public CarEngineTypeResponse updateCarEngineType(long id, CarEngineTypeRequest carEngineTypeRequest) {
+        CarEngineType carEngineType = findCarEngineTypeById(id);
+        carEngineTypeMapper.updateFromRequest(carEngineTypeRequest, carEngineType);
+        CarEngineType save = carEngineTypeRepository.save(carEngineType);
+        return carEngineTypeMapper.toResponse(save);
+    }
+
+    @Override
+    public CarMakeResponse updateCarMake(long id, CarMakeRequest carMakeRequest) {
+        CarMake carMake = findCarMakeById(id);
+        carMakeMapper.updateFromRequest(carMakeRequest, carMake);
+        CarMake save = carMakeRepository.save(carMake);
+        return carMakeMapper.toResponse(save);
+    }
+
+    @Override
+    public CarModelResponse updateCarModel(long id, CarModelRequest carModelRequest) {
+        CarModel carModel = findCarModelById(id);
+        carModelMapper.updateFromRequest(carModelRequest, carModel);
+        CarModel save = carModelRepository.save(carModel);
+        return carModelMapper.toResponse(save);
+    }
+
+    @Override
+    public CarFuelTypeResponse updateCarFuelType(long id, CarFuelTypeRequest carFuelTypeRequest) {
+        CarFuelType carFuelType = findCarFuelTypeById(id);
+        carFuelTypeMapper.updateFromRequest(carFuelTypeRequest, carFuelType);
+        CarFuelType save = carFuelTypeRepository.save(carFuelType);
+        return carFuelTypeMapper.toResponse(save);
+    }
+
+    @Override
+    public CarTransmissionTypeResponse updateCarTransmissionType(long id, CarTransmissionTypeRequest carTransmissionTypeRequest) {
+        CarTransmissionType carTransmissionType = findCarTransmissionTypeById(id);
+        carTransmissionTypeMapper.updateFromRequest(carTransmissionTypeRequest, carTransmissionType);
+        CarTransmissionType save = carTransmissionTypeRepository.save(carTransmissionType);
+        return carTransmissionTypeMapper.toResponse(save);
+    }
 }

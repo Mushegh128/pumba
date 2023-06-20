@@ -23,4 +23,8 @@ public class CarEngineTypeMapper implements BaseMapper<CarEngineType, CarEngineT
     public CarEngineTypeResponse toResponse(CarEngineType carEngineType) {
         return modelMapper.map(carEngineType, CarEngineTypeResponse.class);
     }
+
+    public void updateFromRequest(CarEngineTypeRequest carEngineTypeRequest, CarEngineType carEngineType) {
+        modelMapper.map(carEngineTypeRequest, carEngineType);
+    }
 }

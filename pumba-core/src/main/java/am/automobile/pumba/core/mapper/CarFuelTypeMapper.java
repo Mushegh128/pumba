@@ -24,4 +24,8 @@ public class CarFuelTypeMapper implements BaseMapper<CarFuelType, CarFuelTypeReq
     public CarFuelTypeResponse toResponse(CarFuelType carFuelType) {
         return modelMapper.map(carFuelType, CarFuelTypeResponse.class);
     }
+
+    public void updateFromRequest(CarFuelTypeRequest carFuelTypeRequest, CarFuelType carFuelType) {
+        modelMapper.map(carFuelTypeRequest, carFuelType);
+    }
 }

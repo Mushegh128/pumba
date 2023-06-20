@@ -18,7 +18,7 @@ import lombok.ToString;
 @Table(name = "contact_phone")
 public class ContactPhone extends AbstractEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String phone;
     @Column(nullable = false)
     private String name;

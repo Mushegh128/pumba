@@ -23,4 +23,8 @@ public class CarMakeMapper implements BaseMapper<CarMake, CarMakeRequest, CarMak
     public CarMakeResponse toResponse(CarMake carMake) {
         return modelMapper.map(carMake, CarMakeResponse.class);
     }
+
+    public void updateFromRequest(CarMakeRequest carMakeRequest, CarMake carMake) {
+        modelMapper.map(carMakeRequest, carMake);
+    }
 }

@@ -62,4 +62,28 @@ public interface CarMetaDataService {
     CarFuelType findCarFuelTypeById(long id);
 
     CarTransmissionType findCarTransmissionTypeById(long id);
+
+    void deleteCarDrivetrainTypeById(long id);
+
+    void deleteCarEngineTypeById(long id);
+
+    void deleteCarMakeById(long id);
+
+    void deleteCarModelById(long id);
+
+    void deleteCarFuelTypeById(long id);
+
+    void deleteCarTransmissionTypeById(long id);
+
+    CarDrivetrainTypeResponse updateCarDrivetrainType(long id, CarDrivetrainTypeRequest carDrivetrainTypeRequest);
+
+    CarEngineTypeResponse updateCarEngineType(long id, CarEngineTypeRequest carEngineTypeRequest);
+
+    CarMakeResponse updateCarMake(long id, CarMakeRequest carMakeRequest);
+
+    CarModelResponse updateCarModel(long id, CarModelRequest carModelRequest);
+
+    CarFuelTypeResponse updateCarFuelType(long id, CarFuelTypeRequest carFuelTypeRequest);
+
+    CarTransmissionTypeResponse updateCarTransmissionType(long id, CarTransmissionTypeRequest carTransmissionTypeRequest);
 }

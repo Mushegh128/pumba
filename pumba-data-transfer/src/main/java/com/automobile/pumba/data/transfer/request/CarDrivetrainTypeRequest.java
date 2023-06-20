@@ -14,5 +14,4 @@ public class CarDrivetrainTypeRequest {
 
     @NotBlank
     private String name;
-    private String description;
 }
