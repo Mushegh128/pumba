@@ -81,7 +81,7 @@ public class CarEndpoint {
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Car car = carService.findById(id);
-        return ResponseEntity.ok(carMapper.toResponse(car));
+        return ResponseEntity.ok(carMapper.toResponseDetail(car));
     }
 
     @GetMapping("/images/details-url/{id}")

@@ -3,6 +3,7 @@ package am.automobile.pumba.core.mapper;
 import am.automobile.pumba.core.entity.Car;
 import am.automobile.pumba.core.mapper.base.BaseMapper;
 import com.automobile.pumba.data.transfer.request.CarRequest;
+import com.automobile.pumba.data.transfer.response.CarDetailResponse;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
 
     private final ModelMapper modelMapper;
+    private final CarModelMapper carModelMapper;
+    private final CarMakeMapper carMakeMapper;
 
     @Value("${pumba.baseUrl}")
     private String baseUrl;
@@ -44,6 +47,15 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
         carResponse.setDrivetrainType(car.getDrivetrainType() != null ? car.getDrivetrainType().getId() : null);
         carResponse.setBaseImage(baseUrl + "/car/image/" + car.getBaseImage());
         return carResponse;
+    }
+
+    public CarDetailResponse toResponseDetail(Car car) {
+
+        CarDetailResponse carDetailResponse = modelMapper.map(car, CarDetailResponse.class);
+        carDetailResponse.setCarMake(carMakeMapper.toResponse(car.getMake()));
+        carDetailResponse.setCarModel(carModelMapper.toResponse(car.getModel()));
+        carDetailResponse.setBaseImage(baseUrl + "/car/image/" + car.getBaseImage());
+        return carDetailResponse;
     }
 
     public void updateFromRequest(CarRequest carRequest, Car car) {
