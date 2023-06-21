@@ -40,7 +40,7 @@ public class User extends AbstractEntity {
     private String phone;
 
     @CreationTimestamp
-    @Column(name = "create_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;
     private boolean isEnable;
     @Enumerated(EnumType.STRING)
