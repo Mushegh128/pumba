@@ -3,6 +3,7 @@ package am.automobile.pumba.core.service.impl;
 import am.automobile.pumba.core.entity.Car;
 import am.automobile.pumba.core.entity.IpAddress;
 import am.automobile.pumba.core.entity.Order;
+import am.automobile.pumba.core.entity.OrderJoinRequest;
 import am.automobile.pumba.core.entity.OrderStatusHistory;
 import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.exception.EntityNotFoundException;
@@ -135,5 +136,11 @@ public class OrderServiceImpl implements OrderService {
                 .orderStatusHistories(orderStatusHistoryResponses)
                 .orderJoinRequests(orderJoinRequestResponses)
                 .build();
+    }
+
+    public Page<OrderJoinRequestResponse> findAllRequest(Pageable pageable) {
+        Page<OrderJoinRequest> joinRequests =
+                orderJoinRequestRepository.findAllByApproveFalseAndCancelFalseOrderByCreateAt(pageable);
+        return joinRequests.map(orderJoinRequestMapper::toResponse);
     }
 }

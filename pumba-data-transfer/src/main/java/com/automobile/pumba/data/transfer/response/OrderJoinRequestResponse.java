@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class OrderJoinRequestResponse {
 
+    private Long id;
     private OrderResponse order;
     private UserResponse approveUser;
     private UserResponse requestSenderUser;

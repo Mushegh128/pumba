@@ -1,6 +1,8 @@
 package am.automobile.pumba.core.repository;
 
 import am.automobile.pumba.core.entity.OrderJoinRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,4 +17,6 @@ public interface OrderJoinRequestRepository extends JpaRepository<OrderJoinReque
     List<OrderJoinRequest> findByIdNotAndApproveFalseAndCancelFalse(long id);
 
     List<OrderJoinRequest> findAllByOrder_IdOrderByCreateAtDesc(long orderId);
+
+    Page<OrderJoinRequest> findAllByApproveFalseAndCancelFalseOrderByCreateAt(Pageable pageable);
 }

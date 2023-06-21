@@ -74,7 +74,7 @@ public class OrderEndpoint {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/manager/can el/{orderJoinRequestId}")
+    @PostMapping("/manager/cansel/{orderJoinRequestId}")
     public void cancelOrder(@PathVariable long orderJoinRequestId) {
         orderJoinRequestService.cancelOrderRequest(orderJoinRequestId);
     }
@@ -84,5 +84,11 @@ public class OrderEndpoint {
             @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             @RequestBody OrderFilterRequest orderFilterRequest) {
         return ResponseEntity.ok(orderService.findAll(pageable, orderFilterRequest));
+    }
+
+    @GetMapping("/request-list")
+    public ResponseEntity<?> findAllRequest(
+            @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(orderService.findAllRequest(pageable));
     }
 }
