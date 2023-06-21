@@ -16,7 +16,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -39,16 +38,11 @@ public class User extends AbstractEntity {
     private String password;
     @Column(nullable = false)
     private String phone;
-    private String aboutUser;
-    private String avatar;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
     private boolean isEnable;
-
-    private boolean isBlocked;
-    private LocalDate blockedAt;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

@@ -1,10 +1,9 @@
 package am.automobile.pumba.core.service;
 
 import am.automobile.pumba.core.entity.User;
-import com.automobile.pumba.data.transfer.model.UserPermission;
-import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.UserProfileDetailsRequest;
 import com.automobile.pumba.data.transfer.response.UserProfileDetailsResponse;
+import com.automobile.pumba.data.transfer.response.UserResponse;
 
 import java.util.List;
 
@@ -29,19 +28,9 @@ public interface UserService {
      */
     User findById(long id);
 
-    void addUserPermission(long userId, UserPermission userPermission);
-
-    void addUserPermissions(long userId, List<UserPermission> userPermissions);
-
-    void updateUserPermissions(long userId, List<UserPermission> userPermissions);
-
-    void changeUserRole(long userId, UserRole newUserRole);
-
-    void blockUser(long userId);
-
-    void unblock(long userId);
-
     User getCurrentUser();
 
     UserProfileDetailsResponse changeProfileDetailsRequest(UserProfileDetailsRequest userProfileDetailsRequest);
+
+    List<UserResponse> findAll();
 }

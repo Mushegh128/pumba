@@ -1,6 +1,9 @@
 package am.automobile.pumba.web.endpoint;
 
+import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.service.AuthService;
+import am.automobile.pumba.core.service.UserService;
+import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthEndpoint {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
@@ -46,7 +50,9 @@ public class AuthEndpoint {
 
     @PostMapping("/change-password")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> changePassword() {
+    public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest) {
+        User currentUser = userService.getCurrentUser();
+        authService.changePassword(passwordChangeRequest, currentUser);
         return ResponseEntity.ok().build();
     }
 

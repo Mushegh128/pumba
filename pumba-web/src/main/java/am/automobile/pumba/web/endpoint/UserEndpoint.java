@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -31,6 +33,11 @@ public class UserEndpoint {
     public ResponseEntity<UserResponse> getCurrentUser() {
         User user = userService.getCurrentUser();
         return ResponseEntity.ok(userMapper.toResponse(user));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<UserResponse>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping("/profile-details-change")

@@ -1,5 +1,7 @@
 package am.automobile.pumba.core.service;
 
+import am.automobile.pumba.core.entity.User;
+import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
@@ -27,4 +29,6 @@ public interface AuthService {
      * @return a UserRegistrationResponse object containing the newly registered user's details
      */
     UserRegistrationResponse registration(UserRegistrationRequest userRegistrationRequest);
+
+    void changePassword(PasswordChangeRequest passwordChangeRequest, User currentUser);
 }

@@ -8,6 +8,7 @@ import am.automobile.pumba.core.mapper.UserRegistrationMapper;
 import am.automobile.pumba.core.repository.UserRepository;
 import am.automobile.pumba.core.service.AuthService;
 import am.automobile.pumba.core.util.JwtTokenUtil;
+import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
@@ -58,5 +59,20 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         log.info("Succeed registered user by email: {}", userRequest.getEmail());
         return userRegistrationMapper.toResponse(user);
+    }
+
+    @Override
+    public void changePassword(PasswordChangeRequest passwordChangeRequest, User currentUser) {
+        log.info("Request to change password for user: {}", currentUser.getEmail());
+
+        if (!passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), currentUser.getPassword())) {
+            throw new AuthenticatedException("Incorrect current password");
+        }
+
+        String newPassword = passwordEncoder.encode(passwordChangeRequest.getNewPassword());
+        currentUser.setPassword(newPassword);
+        userRepository.save(currentUser);
+
+        log.info("Password changed successfully for user: {}", currentUser.getEmail());
     }
 }

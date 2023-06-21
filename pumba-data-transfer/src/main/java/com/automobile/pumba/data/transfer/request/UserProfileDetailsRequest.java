@@ -20,8 +20,4 @@ public class UserProfileDetailsRequest {
     private String lastName;
     @NotBlank
     private String phone;
-    @NotBlank
-    private String avatar;
-    @NotBlank
-    private String aboutUser;
 }
