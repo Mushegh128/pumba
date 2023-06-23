@@ -26,8 +26,8 @@ public class ContactSellerMapper implements BaseMapper<ContactSeller, ContactSel
         ContactSellerResponse contactSellerResponse = modelMapper.map(contactSeller, ContactSellerResponse.class);
         if (contactSeller.getCar() != null) {
             contactSellerResponse.setCar(carMapper.toResponse(contactSeller.getCar()));
+            contactSellerResponse.setCar(carMapper.toResponse(contactSeller.getCar()));
         }
-        contactSellerResponse.setCar(carMapper.toResponse(contactSeller.getCar()));
         return contactSellerResponse;
     }
 }

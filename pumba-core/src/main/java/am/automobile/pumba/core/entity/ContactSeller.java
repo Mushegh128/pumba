@@ -36,7 +36,6 @@ public class ContactSeller extends AbstractEntity {
     private IpAddress ipAddress;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
     private Car car;
     private Boolean isDelete;
 

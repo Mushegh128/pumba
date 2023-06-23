@@ -2,6 +2,7 @@ package am.automobile.pumba.core.specifications.filter;
 
 import am.automobile.pumba.core.entity.User;
 import com.automobile.pumba.data.transfer.model.CarTracking;
+import com.automobile.pumba.data.transfer.model.UserPermission;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
@@ -11,24 +12,12 @@ import java.util.List;
 
 public interface CarAdminFilterSpecifications<T> {
 
-
-    default void addRequestedPredicate(Root<T> root, CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
-        Boolean requested = carFilterRequest().getRequested();
-        if (requested != null) {
-            predicates.add(criteriaBuilder.equal(root.get("requested"), requested));
-        }
-    }
-
-    default void addMyAddedPredicate(Root<T> root, CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
-        Boolean myAdded = carFilterRequest().getMyAdded();
-        if (myAdded != null) {
-            Predicate predicate;
-            if (myAdded) {
-                predicate = criteriaBuilder.equal(root.get("owner").get("id"), user().getId());
-            } else {
-                predicate = criteriaBuilder.notEqual(root.get("owner").get("id"), user().getId());
-            }
-            predicates.add(predicate);
+    default void addIsNotApprovedPredicate(Root<T> root, CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
+        Boolean isNotApproved = carFilterRequest().getIsNotApproved();
+        if (isNotApproved != null && isNotApproved.equals(true) && user().getPermissions().contains(UserPermission.MANAGE_CAR_APPROVE)) {
+            predicates.add(criteriaBuilder.isFalse(root.get("isApproved")));
+        } else {
+            predicates.add(criteriaBuilder.isTrue(root.get("isApproved")));
         }
     }
 

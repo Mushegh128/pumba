@@ -46,7 +46,7 @@ public class CarImageServiceImpl implements CarImageService {
 
     @Override
     public List<String> findAllUrlByCarId(long carId) {
-        return carImageRepository.findAllByCar_Id(carId)
+        return carImageRepository.findAllByCar_IdAndCar_IsApprovedTrueAndCar_IsPublicTrue(carId)
                 .stream().map(carImage -> baseUrl + "/car/image/" + carImage.getImageUrl())
                 .collect(Collectors.toList());
     }

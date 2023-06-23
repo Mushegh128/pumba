@@ -8,16 +8,20 @@ import am.automobile.pumba.core.mapper.UserRegistrationMapper;
 import am.automobile.pumba.core.repository.UserRepository;
 import am.automobile.pumba.core.service.AuthService;
 import am.automobile.pumba.core.util.JwtTokenUtil;
+import com.automobile.pumba.data.transfer.model.UserPermission;
+import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
 import com.automobile.pumba.data.transfer.response.UserRegistrationResponse;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.EnumSet;
 import java.util.Optional;
 
 @Component
@@ -56,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         }
         User user = userRegistrationMapper.toEntity(userRequest);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setPermissions(userRequest.getPermissions());
         userRepository.save(user);
         log.info("Succeed registered user by email: {}", userRequest.getEmail());
         return userRegistrationMapper.toResponse(user);
@@ -74,5 +79,24 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(currentUser);
 
         log.info("Password changed successfully for user: {}", currentUser.getEmail());
+    }
+
+    @PostConstruct
+    private void createInitialAdminUser() {
+        String adminEmail = "admin@gmail.com";
+        Optional<User> userOptional = userRepository.findByEmail(adminEmail);
+        if (userOptional.isEmpty()) {
+            UserRegistrationRequest userRequest = UserRegistrationRequest.builder()
+                    .firstName("Admin")
+                    .lastName("Admin")
+                    .permissions(EnumSet.allOf(UserPermission.class))
+                    .email(adminEmail)
+                    .phone("+37466666666")
+                    .build();
+            User user = userRegistrationMapper.toEntity(userRequest);
+            user.setPassword("$2a$10$8NXc6KhYOE4gxnIemF7uZuCD887BvhMPoEmZmNjH7myA8ent19nJS");
+            user.setRole(UserRole.ADMIN);
+            userRepository.save(user);
+        }
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,22 +41,25 @@ public class CarEndpoint {
     private final CarMapper carMapper;
 
     @PostMapping
+    @PreAuthorize("hasPermission('MANAGE_CAR_CREATE')")
     public ResponseEntity<CarResponse> createCar(@Valid @RequestBody CarRequest carRequest) {
         return ResponseEntity.ok(carService.createCar(carRequest));
     }
 
     @PutMapping("/{carId}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_UPDATE','MANAGE_All_CARS_UPDATE')")
     public ResponseEntity<CarResponse> editCar(@Valid @RequestBody CarRequest carRequest, @PathVariable long carId) {
         return ResponseEntity.ok(carService.editCar(carRequest, carId));
     }
 
+    @PostAuthorize("isAuthenticated()")
     @PostMapping("/image")
-    public ResponseEntity<String> createCar(@RequestParam("image") MultipartFile file) {
+    public ResponseEntity<String> createCarImage(@RequestParam("image") MultipartFile file) {
         return ResponseEntity.ok(carService.saveImage(file));
     }
 
     @GetMapping("/image/{fileName}")
-    public ResponseEntity<byte[]> createCar(@PathVariable String fileName) {
+    public ResponseEntity<byte[]> getCarImage(@PathVariable String fileName) {
         byte[] image = carService.getImage(fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
@@ -65,7 +69,7 @@ public class CarEndpoint {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/admin/filter")
-    public ResponseEntity<?> findAll(
+    public ResponseEntity<?> findAllAdminFilter(
             @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             @RequestBody CarAdminFilterRequest carFilterRequest) {
         return ResponseEntity.ok(carService.findAllForAdmin(pageable, carFilterRequest));
@@ -80,7 +84,7 @@ public class CarEndpoint {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Car car = carService.findById(id);
+        Car car = carService.findByIdAndIsPublicTrueAndIsApprovedTrue(id);
         return ResponseEntity.ok(carMapper.toResponseDetail(car));
     }
 

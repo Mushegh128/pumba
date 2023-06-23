@@ -61,7 +61,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> findAll() {
-        return userRepository.findAll().stream()
+        User currentUser = getCurrentUser();
+        return userRepository.findAllByIdNot(currentUser.getId()).stream()
                 .map(userMapper::toResponse)
                 .collect(Collectors.toList());
     }

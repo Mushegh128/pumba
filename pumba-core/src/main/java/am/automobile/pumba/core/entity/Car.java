@@ -81,14 +81,12 @@ public class Car extends AbstractEntity {
     private CarTracking tracking;
 
     @CreationTimestamp
-    @Column(name = "create_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;
 
     @UpdateTimestamp
-    @Column(name = "update_at")
     private LocalDate updateAt;
 
     private Boolean isPublic;
-    private Boolean isRequested;
     private Boolean isApproved;
 }

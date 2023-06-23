@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CarAdminFilterRequest {
 
     private Boolean all;
-    private Boolean requested;
+    private Boolean isNotApproved;
     private Boolean myAdded;
     private Boolean inAuction;
     private Boolean inTransit;

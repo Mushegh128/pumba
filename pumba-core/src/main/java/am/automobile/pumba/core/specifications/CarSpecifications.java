@@ -67,6 +67,8 @@ public record CarSpecifications<T>(CarFilterRequest carFilterRequest)
         if (carFilterRequest.getYear() != null) {
             predicates.add(criteriaBuilder.equal(root.get("year"), carFilterRequest.getYear()));
         }
+        predicates.add(criteriaBuilder.isTrue(root.get("isPublic")));
+        predicates.add(criteriaBuilder.isTrue(root.get("isApproved")));
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

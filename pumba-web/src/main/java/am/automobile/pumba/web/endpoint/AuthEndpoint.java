@@ -36,6 +36,7 @@ public class AuthEndpoint {
     }
 
     @PostMapping("/register")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> userRegister(@Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
         UserRegistrationResponse register = authService.registration(userRegistrationRequest);
         return ResponseEntity.ok(register);

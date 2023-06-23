@@ -52,8 +52,12 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
     public CarDetailResponse toResponseDetail(Car car) {
 
         CarDetailResponse carDetailResponse = modelMapper.map(car, CarDetailResponse.class);
-        carDetailResponse.setCarMake(carMakeMapper.toResponse(car.getMake()));
-        carDetailResponse.setCarModel(carModelMapper.toResponse(car.getModel()));
+        if (car.getMake() != null) {
+            carDetailResponse.setCarMake(carMakeMapper.toResponse(car.getMake()));
+        }
+        if (car.getModel() != null) {
+            carDetailResponse.setCarModel(carModelMapper.toResponse(car.getModel()));
+        }
         carDetailResponse.setBaseImage(baseUrl + "/car/image/" + car.getBaseImage());
         return carDetailResponse;
     }

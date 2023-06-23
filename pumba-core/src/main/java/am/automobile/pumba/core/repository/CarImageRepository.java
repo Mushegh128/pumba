@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CarImageRepository extends JpaRepository<CarImage, Long> {
 
-    List<CarImage> findAllByCar_Id(long carId);
+    List<CarImage> findAllByCar_IdAndCar_IsApprovedTrueAndCar_IsPublicTrue(long carId);
 }

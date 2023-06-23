@@ -21,9 +21,12 @@ import am.automobile.pumba.core.service.UserService;
 import am.automobile.pumba.core.specifications.CarAdminSpecifications;
 import am.automobile.pumba.core.specifications.CarSpecifications;
 import am.automobile.pumba.core.util.IOUtil;
+import com.automobile.pumba.data.transfer.model.UserPermission;
+import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarRequest;
+import com.automobile.pumba.data.transfer.response.CarDetailResponse;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +75,17 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponse editCar(CarRequest carRequest, long carId) {
-        Car car = findById(carId);
+        User currentUser = userService.getCurrentUser();
+        Car car;
+        if (currentUser.getRole().equals(UserRole.DEALER) || !currentUser.getPermissions().contains(UserPermission.MANAGE_All_CARS_UPDATE)) {
+            car = findByIdAndOwnerId(carId, currentUser.getId());
+        } else {
+            if (currentUser.getPermissions().contains(UserPermission.MANAGE_CAR_APPROVE)) {
+                car = findById(carId);
+            } else {
+                car = findByIdAndIsPublicTrueAndIsApprovedTrue(carId);
+            }
+        }
 
         updateCarAttributes(car, carRequest);
 
@@ -103,30 +116,32 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Page<CarResponse> findAllForAdmin(Pageable pageable, CarAdminFilterRequest carFilterRequest) {
-        Page<Car> carPage;
-        if (carFilterRequest.getAll() != null && carFilterRequest.getAll().equals(true)) {
-            carPage = carRepository.findAll(pageable);
-        } else {
-            User currentUser = userService.getCurrentUser();
-            CarAdminSpecifications<Car> filterSpecifications = new CarAdminSpecifications<>(carFilterRequest, currentUser);
+    public Car findByIdAndIsPublicTrueAndIsApprovedTrue(long id) {
+        log.info("Find User by ID: {}", id);
+        return carRepository.findByIdAndIsPublicTrueAndIsApprovedTrue(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car with id: " + id + " not found"));
+    }
 
-            carPage = carRepository.findAll(filterSpecifications, pageable);
-        }
+    @Override
+    public Car findByIdAndOwnerId(long id, long ownerId) {
+        log.info("Find User by ID: {}", id);
+        return carRepository.findByIdAndOwner_Id(id, ownerId)
+                .orElseThrow(() -> new EntityNotFoundException("Car with id: " + id + " not found"));
+    }
+
+    @Override
+    public Page<CarResponse> findAllForAdmin(Pageable pageable, CarAdminFilterRequest carFilterRequest) {
+        User currentUser = userService.getCurrentUser();
+        CarAdminSpecifications<Car> filterSpecifications = new CarAdminSpecifications<>(carFilterRequest, currentUser);
+        Page<Car> carPage = carRepository.findAll(filterSpecifications, pageable);
         return carPage.map(carMapper::toResponse);
     }
 
     @Override
-    public Page<CarResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest) {
-
-        Page<Car> carPage;
-        if (carFilterRequest != null && carFilterRequest.isEmpty()) {
-            carPage = carRepository.findAll(pageable);
-        } else {
-            CarSpecifications<Car> filterSpecifications = new CarSpecifications<>(carFilterRequest);
-            carPage = carRepository.findAll(filterSpecifications, pageable);
-        }
-        return carPage.map(carMapper::toResponse);
+    public Page<CarDetailResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest) {
+        CarSpecifications<Car> filterSpecifications = new CarSpecifications<>(carFilterRequest);
+        Page<Car> carPage = carRepository.findAll(filterSpecifications, pageable);
+        return carPage.map(carMapper::toResponseDetail);
     }
 
     private void updateCarAttributes(Car car, CarRequest carRequest) {

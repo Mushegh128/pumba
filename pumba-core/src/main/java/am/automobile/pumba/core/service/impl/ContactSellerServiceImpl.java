@@ -28,9 +28,11 @@ public class ContactSellerServiceImpl implements ContactSellerService {
     @Override
     public ContactSellerResponse save(ContactSellerRequest contactSellerRequest, IpAddress ipAddress) {
         ContactSeller contactSeller = contactSellerMapper.toEntity(contactSellerRequest);
-        Car car = carService.findById(contactSellerRequest.getCar());
+        if (contactSellerRequest.getCar() != null) {
+            Car car = carService.findByIdAndIsPublicTrueAndIsApprovedTrue(contactSellerRequest.getCar());
+            contactSeller.setCar(car);
+        }
         contactSeller.setIpAddress(ipAddress);
-        contactSeller.setCar(car);
         contactSeller.setIsDelete(false);
         ContactSeller save = contactSellerRepository.save(contactSeller);
         return contactSellerMapper.toResponse(save);

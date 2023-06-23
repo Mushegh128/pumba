@@ -1,5 +1,6 @@
 package com.automobile.pumba.data.transfer.request;
 
+import com.automobile.pumba.data.transfer.model.UserPermission;
 import com.automobile.pumba.data.transfer.model.UserRoleGroupB;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -41,4 +44,5 @@ public class UserRegistrationRequest {
     @NotNull(message = "Role is required")
     @Enumerated(EnumType.STRING)
     private UserRoleGroupB role;
+    private Set<UserPermission> permissions;
 }

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificationExecutor<Car> {
 
     @Modifying
@@ -39,4 +41,8 @@ public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificatio
     @Modifying
     @Query("UPDATE Car c SET c.contactPhone = null WHERE c.contactPhone.id = :contactPhoneId")
     void updateContactPhoneIdToNull(Long contactPhoneId);
+
+    Optional<Car> findByIdAndOwner_Id(long id, long ownerId);
+
+    Optional<Car> findByIdAndIsPublicTrueAndIsApprovedTrue(long id);
 }

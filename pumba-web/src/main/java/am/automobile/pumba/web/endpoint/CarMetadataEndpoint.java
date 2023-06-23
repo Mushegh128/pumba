@@ -17,6 +17,7 @@ import com.automobile.pumba.data.transfer.response.CarTransmissionTypeResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,17 +39,20 @@ public class CarMetadataEndpoint {
     private final CarMetaDataService carMetaDataService;
 
     @PostMapping("/drivetrain")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_CREATE')")
     public ResponseEntity<CarDrivetrainTypeResponse> createCarDrivetrainType(@Valid @RequestBody CarDrivetrainTypeRequest carDrivetrainTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.createCarDrivetrainType(carDrivetrainTypeRequest));
     }
 
     @DeleteMapping("/drivetrain/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_DELETE')")
     public ResponseEntity<?> deleteCarDrivetrainType(@PathVariable long id) {
         carMetaDataService.deleteCarDrivetrainTypeById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/drivetrain/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_UPDATE')")
     public ResponseEntity<?> updateCarDrivetrainType(@PathVariable long id, @Valid @RequestBody CarDrivetrainTypeRequest carDrivetrainTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.updateCarDrivetrainType(id, carDrivetrainTypeRequest));
     }
@@ -59,17 +63,20 @@ public class CarMetadataEndpoint {
     }
 
     @PostMapping("/engine")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_CREATE')")
     public ResponseEntity<CarEngineTypeResponse> createCarEngineType(@Valid @RequestBody CarEngineTypeRequest carEngineTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.createCarEngineType(carEngineTypeRequest));
     }
 
     @DeleteMapping("/engine/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_DELETE')")
     public ResponseEntity<?> deleteEngine(@PathVariable long id) {
         carMetaDataService.deleteCarEngineTypeById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/engine/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_UPDATE')")
     public ResponseEntity<?> updateEngine(@PathVariable long id, @Valid @RequestBody CarEngineTypeRequest carEngineTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.updateCarEngineType(id, carEngineTypeRequest));
     }
@@ -80,17 +87,20 @@ public class CarMetadataEndpoint {
     }
 
     @PostMapping("/make")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_CREATE')")
     public ResponseEntity<CarMakeResponse> createCarMake(@Valid @RequestBody CarMakeRequest carMakeRequest) {
         return ResponseEntity.ok(carMetaDataService.createCarMake(carMakeRequest));
     }
 
     @DeleteMapping("/make/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_DELETE')")
     public ResponseEntity<?> deleteMake(@PathVariable long id) {
         carMetaDataService.deleteCarMakeById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/make/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_UPDATE')")
     public ResponseEntity<?> updateMake(@PathVariable long id, @Valid @RequestBody CarMakeRequest carMakeRequest) {
         return ResponseEntity.ok(carMetaDataService.updateCarMake(id, carMakeRequest));
     }
@@ -101,6 +111,7 @@ public class CarMetadataEndpoint {
     }
 
     @PostMapping("/model")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_CREATE')")
     public ResponseEntity<CarModelResponse> createCarModel(@Valid @RequestBody CarModelRequest carModelRequest) {
         return ResponseEntity.ok(carMetaDataService.createCarModel(carModelRequest));
     }
@@ -111,17 +122,20 @@ public class CarMetadataEndpoint {
     }
 
     @DeleteMapping("/model/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_DELETE')")
     public ResponseEntity<?> deleteModel(@PathVariable long id) {
         carMetaDataService.deleteCarModelById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/model/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_UPDATE')")
     public ResponseEntity<?> updateModel(@PathVariable long id, @Valid @RequestBody CarModelRequest carModelRequest) {
         return ResponseEntity.ok(carMetaDataService.updateCarModel(id, carModelRequest));
     }
 
     @PostMapping("/fuel-type")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_CREATE')")
     public ResponseEntity<CarFuelTypeResponse> createCarFuelType(@Valid @RequestBody CarFuelTypeRequest carFuelTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.createCarFuelType(carFuelTypeRequest));
     }
@@ -132,17 +146,20 @@ public class CarMetadataEndpoint {
     }
 
     @DeleteMapping("/fuel-type/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_DELETE')")
     public ResponseEntity<?> deleteFuelType(@PathVariable long id) {
         carMetaDataService.deleteCarFuelTypeById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/fuel-type/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_UPDATE')")
     public ResponseEntity<?> updateFuelType(@PathVariable long id, @Valid @RequestBody CarFuelTypeRequest carFuelTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.updateCarFuelType(id, carFuelTypeRequest));
     }
 
     @PostMapping("/transmission")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_CREATE')")
     public ResponseEntity<CarTransmissionTypeResponse> createCarTransmissionType(@Valid @RequestBody CarTransmissionTypeRequest carTransmissionTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.createCarTransmissionType(carTransmissionTypeRequest));
     }
@@ -153,12 +170,14 @@ public class CarMetadataEndpoint {
     }
 
     @DeleteMapping("/transmission/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_DELETE')")
     public ResponseEntity<?> deleteTransmission(@PathVariable long id) {
         carMetaDataService.deleteCarTransmissionTypeById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/transmission/{id}")
+    @PreAuthorize("hasPermission('MANAGE_CAR_METADATA_UPDATE')")
     public ResponseEntity<?> updateTransmission(@PathVariable long id, @Valid @RequestBody CarTransmissionTypeRequest carTransmissionTypeRequest) {
         return ResponseEntity.ok(carMetaDataService.updateCarTransmissionType(id, carTransmissionTypeRequest));
     }

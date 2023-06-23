@@ -4,6 +4,7 @@ import am.automobile.pumba.core.entity.Car;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarRequest;
+import com.automobile.pumba.data.transfer.response.CarDetailResponse;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +20,14 @@ public interface CarService {
 
     Car findById(long id);
 
+    Car findByIdAndIsPublicTrueAndIsApprovedTrue(long id);
+
+    Car findByIdAndOwnerId(long id, long ownerId);
+
     Page<CarResponse> findAllForAdmin(Pageable pageable, CarAdminFilterRequest carFilterRequest);
 
-    Page<CarResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest);
+
+    Page<CarDetailResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest);
 
     CarResponse editCar(CarRequest carRequest, long carId);
 }

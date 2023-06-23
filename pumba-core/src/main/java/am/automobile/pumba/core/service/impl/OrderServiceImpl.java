@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest, IpAddress ipAddress) {
-        Car car = carService.findById(orderRequest.getCar());
+        Car car = carService.findByIdAndIsPublicTrueAndIsApprovedTrue(orderRequest.getCar());
         Order order = orderMapper.toEntity(orderRequest);
         order.setCar(car);
         order.setIpAddress(ipAddress);
