@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class CarDetailResponse {
 
     private Long id;
+    private Long owner;
     private String title;
     private String subTitle;
     private CarMakeResponse carMake;

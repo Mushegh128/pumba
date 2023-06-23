@@ -45,19 +45,19 @@ public class ContactEndpoint {
     }
 
     @PostMapping("/phone")
-    @PreAuthorize("hasPermission('MANAGE_CONTACT_CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_CONTACT_CREATE')")
     public ResponseEntity<?> createContactPhone(@Valid @RequestBody ContactPhoneRequest contactPhoneRequest) {
         return ResponseEntity.ok(contactService.createPhone(contactPhoneRequest));
     }
 
     @PutMapping("/phone/{id}")
-    @PreAuthorize("hasPermission('MANAGE_CONTACT_UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_CONTACT_UPDATE')")
     public ResponseEntity<?> updateContactPhone(@Valid @RequestBody ContactPhoneRequest contactPhoneRequest, @PathVariable long id) {
         return ResponseEntity.ok(contactService.updatePhone(id, contactPhoneRequest));
     }
 
     @DeleteMapping("/phone/{id}")
-    @PreAuthorize("hasPermission('MANAGE_CONTACT_DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_CONTACT_DELETE')")
     public ResponseEntity<?> deleteContactPhone(@PathVariable long id) {
         contactService.deletePhoneById(id);
         return ResponseEntity.ok().build();
@@ -69,19 +69,19 @@ public class ContactEndpoint {
     }
 
     @PostMapping("/email")
-    @PreAuthorize("hasPermission('MANAGE_CONTACT_CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_CONTACT_CREATE')")
     public ResponseEntity<?> createContactEmails(@Valid @RequestBody ContactEmailRequest contactEmailRequest) {
         return ResponseEntity.ok(contactService.createEmail(contactEmailRequest));
     }
 
     @PutMapping("/email/{id}")
-    @PreAuthorize("hasPermission('MANAGE_CONTACT_UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_CONTACT_UPDATE')")
     public ResponseEntity<?> updateContactEmails(@Valid @RequestBody ContactEmailRequest contactEmailRequest, @PathVariable long id) {
         return ResponseEntity.ok(contactService.updateEmail(id, contactEmailRequest));
     }
 
     @DeleteMapping("/email/{id}")
-    @PreAuthorize("hasPermission('MANAGE_CONTACT_DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_CONTACT_DELETE')")
     public ResponseEntity<?> deleteContactEmails(@PathVariable long id) {
         contactService.deleteEmailById(id);
         return ResponseEntity.ok().build();
@@ -97,14 +97,14 @@ public class ContactEndpoint {
     }
 
     @DeleteMapping("/seller/{contactSellerId}")
-    @PreAuthorize("hasPermission('MANAGE_SELLER_CONTACT_DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_SELLER_CONTACT_DELETE')")
     public ResponseEntity<?> deleteContactSeller(@PathVariable long contactSellerId) {
         contactSellerService.deleteById(contactSellerId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/seller")
-    @PreAuthorize("hasPermission('MANAGE_SELLER_CONTACT_READ')")
+    @PreAuthorize("hasAuthority('MANAGE_SELLER_CONTACT_READ')")
     public ResponseEntity<?> findAll(@PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(contactSellerService.findAll(pageable));
     }

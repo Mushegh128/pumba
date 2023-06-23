@@ -1,7 +1,5 @@
 package am.automobile.pumba.web.endpoint;
 
-import am.automobile.pumba.core.entity.Car;
-import am.automobile.pumba.core.mapper.CarMapper;
 import am.automobile.pumba.core.service.CarImageService;
 import am.automobile.pumba.core.service.CarService;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
@@ -38,21 +36,20 @@ public class CarEndpoint {
 
     private final CarService carService;
     private final CarImageService carImageService;
-    private final CarMapper carMapper;
 
     @PostMapping
-    @PreAuthorize("hasPermission('MANAGE_CAR_CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_CAR_CREATE')")
     public ResponseEntity<CarResponse> createCar(@Valid @RequestBody CarRequest carRequest) {
         return ResponseEntity.ok(carService.createCar(carRequest));
     }
-
+//todo  Authority-in ushadrutyun darcnel
     @PutMapping("/{carId}")
-    @PreAuthorize("hasPermission('MANAGE_CAR_UPDATE','MANAGE_All_CARS_UPDATE')")
+    @PreAuthorize("hasAnyAuthority('MANAGE_CAR_UPDATE','MANAGE_ALL_CARS_UPDATE')")
     public ResponseEntity<CarResponse> editCar(@Valid @RequestBody CarRequest carRequest, @PathVariable long carId) {
         return ResponseEntity.ok(carService.editCar(carRequest, carId));
     }
 
-    @PostAuthorize("isAuthenticated()")
+    @PostAuthorize("isAuthenticated() and hasAuthority('')")
     @PostMapping("/image")
     public ResponseEntity<String> createCarImage(@RequestParam("image") MultipartFile file) {
         return ResponseEntity.ok(carService.saveImage(file));
@@ -84,8 +81,7 @@ public class CarEndpoint {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Car car = carService.findByIdAndIsPublicTrueAndIsApprovedTrue(id);
-        return ResponseEntity.ok(carMapper.toResponseDetail(car));
+        return ResponseEntity.ok(carService.findByIdAndAccess(id));
     }
 
     @GetMapping("/images/details-url/{id}")

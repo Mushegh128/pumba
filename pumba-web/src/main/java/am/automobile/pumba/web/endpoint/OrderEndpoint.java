@@ -47,39 +47,39 @@ public class OrderEndpoint {
     }
 
     @PostMapping("/manager/join/{orderId}")
-    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR') and hasPermission('MANAGE_ORDER_JOIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR') and hasAuthority('MANAGE_ORDER_JOIN')")
     public void joinOrder(@PathVariable long orderId) {
         User currentUser = userService.getCurrentUser();
         orderService.joinOrderManager(orderId, currentUser);
     }
 
     @GetMapping("/manager/history/{orderId}")
-    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR') and hasPermission('MANAGE_ORDER_VIEW_HISTORY')")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR') and hasAuthority('MANAGE_ORDER_VIEW_HISTORY')")
     public ResponseEntity<?> findAllOrderHistory(@PathVariable long orderId) {
         return ResponseEntity.ok(orderService.findAllHistoryByOrderId(orderId));
     }
 
     @PostMapping("/manager/approve/{orderJoinRequestId}")
-    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR') and hasPermission('MANAGE_ORDER_APPROVE')")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR') and hasAuthority('MANAGE_ORDER_APPROVE')")
     public void approveOrder(@PathVariable long orderJoinRequestId) {
         orderJoinRequestService.approveOrderRequest(orderJoinRequestId);
     }
 
     @PostMapping("/manager/change-status/{orderId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasPermission('MANAGE_ORDER_STATUS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasAuthority('MANAGE_ORDER_STATUS')")
     public void changeOrderStatus(@PathVariable long orderId, @RequestParam OrderStatus orderStatus) {
         User currentUser = userService.getCurrentUser();
         orderService.changeStatus(orderId, orderStatus, currentUser);
     }
 
     @PostMapping("/manager/cancel/{orderJoinRequestId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasPermission('MANAGE_ORDER_CANCEL')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasAuthority('MANAGE_ORDER_CANCEL')")
     public void cancelOrder(@PathVariable long orderJoinRequestId) {
         orderJoinRequestService.cancelOrderRequest(orderJoinRequestId);
     }
 
     @PostMapping("/list")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasPermission('MANAGE_ORDER_VIEW')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasAuthority('MANAGE_ORDER_VIEW')")
     public ResponseEntity<?> findAll(
             @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             @RequestBody OrderFilterRequest orderFilterRequest) {
@@ -87,7 +87,7 @@ public class OrderEndpoint {
     }
 
     @GetMapping("/request-list")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasPermission('MANAGE_ORDER_REQUEST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and hasAuthority('MANAGE_ORDER_REQUEST')")
     public ResponseEntity<?> findAllRequest(
             @PageableDefault(sort = {"createAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(orderService.findAllRequest(pageable));

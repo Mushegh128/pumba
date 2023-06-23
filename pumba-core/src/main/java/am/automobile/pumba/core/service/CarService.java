@@ -30,4 +30,6 @@ public interface CarService {
     Page<CarDetailResponse> findAllFilter(Pageable pageable, CarFilterRequest carFilterRequest);
 
     CarResponse editCar(CarRequest carRequest, long carId);
+
+    CarResponse findByIdAndAccess(long id);
 }

@@ -50,7 +50,7 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
     private static List<SimpleGrantedAuthority> getAuthorities(Set<UserPermission> permissions, UserRole role) {
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
         permissions.forEach(authority ->
-                grantedAuthorities.add(new SimpleGrantedAuthority(authority.name().toLowerCase())));
+                grantedAuthorities.add(new SimpleGrantedAuthority(authority.name().toUpperCase())));
         grantedAuthorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.name()));
         return grantedAuthorities;
     }

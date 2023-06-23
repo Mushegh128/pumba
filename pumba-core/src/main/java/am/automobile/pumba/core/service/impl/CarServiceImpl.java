@@ -36,6 +36,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -77,7 +79,7 @@ public class CarServiceImpl implements CarService {
     public CarResponse editCar(CarRequest carRequest, long carId) {
         User currentUser = userService.getCurrentUser();
         Car car;
-        if (currentUser.getRole().equals(UserRole.DEALER) || !currentUser.getPermissions().contains(UserPermission.MANAGE_All_CARS_UPDATE)) {
+        if (currentUser.getRole().equals(UserRole.DEALER) || !currentUser.getPermissions().contains(UserPermission.MANAGE_ALL_CARS_UPDATE)) {
             car = findByIdAndOwnerId(carId, currentUser.getId());
         } else {
             if (currentUser.getPermissions().contains(UserPermission.MANAGE_CAR_APPROVE)) {
@@ -96,6 +98,22 @@ public class CarServiceImpl implements CarService {
         }
 
         return carMapper.toResponse(save);
+    }
+
+    @Override
+    public CarResponse findByIdAndAccess(long id) {
+        Car car = null;
+        try {
+            User currentUser = userService.getCurrentUser();
+            Optional<Car> carOptional = carRepository.findByIdAndOwner_Id(id, currentUser.getId());
+
+            if (currentUser.getPermissions().contains(UserPermission.VIEW_All_CARS) || carOptional.isPresent()) {
+                car = findById(id);
+            }
+        } catch (RuntimeException e) {
+            car = findByIdAndIsPublicTrueAndIsApprovedTrue(id);
+        }
+        return carMapper.toResponse(car);
     }
 
     @Override

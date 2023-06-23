@@ -3,8 +3,7 @@ package com.automobile.pumba.data.transfer.model;
 public enum UserPermission {
 
     MANAGE_CAR_CREATE,
-    MANAGE_CAR_UPDATE,
-    MANAGE_All_CARS_UPDATE,
+    MANAGE_ALL_CARS_UPDATE,
     VIEW_All_CARS,
 
     MANAGE_CAR_APPROVE,
@@ -24,10 +23,7 @@ public enum UserPermission {
     MANAGE_ORDER_JOIN,
     MANAGE_ORDER_VIEW_HISTORY,
     MANAGE_ORDER_APPROVE,
-    MANAGE_ORDER_STATUS,
     MANAGE_ORDER_CANCEL,
+    MANAGE_ORDER_STATUS,
     MANAGE_ORDER_VIEW,
-
-
-    USERS_VIEW
 }
