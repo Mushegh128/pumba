@@ -27,4 +27,6 @@ public interface OrderService {
     OrderHistoryResponse findAllHistoryByOrderId(Long orderId);
 
     Page<OrderJoinRequestResponse> findAllRequest(Pageable pageable);
+
+    void expelAllOrdersManagerByManagerId(long managerId);
 }

@@ -7,7 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserRegistrationRequest {
+public class UserUpdateRequest {
 
     @NotBlank(message = "Last name is required")
     @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
@@ -36,14 +35,10 @@ public class UserRegistrationRequest {
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&)")
-    private String password;
     @NotNull(message = "Role is required")
     @Enumerated(EnumType.STRING)
     private UserRoleGroupB role;
     private Set<UserPermission> permissions;
+    @NotNull
+    private Boolean isBlocked;
 }

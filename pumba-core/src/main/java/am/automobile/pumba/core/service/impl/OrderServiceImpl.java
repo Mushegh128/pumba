@@ -143,4 +143,9 @@ public class OrderServiceImpl implements OrderService {
                 orderJoinRequestRepository.findAllByApproveFalseAndCancelFalseOrderByCreateAt(pageable);
         return joinRequests.map(orderJoinRequestMapper::toResponse);
     }
+
+    @Override
+    public void expelAllOrdersManagerByManagerId(long managerId) {
+        orderRepository.expelAllOrdersManagerByManagerId(managerId);
+    }
 }

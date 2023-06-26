@@ -1,6 +1,8 @@
 package am.automobile.pumba.core.repository;
 
 import am.automobile.pumba.core.entity.Car;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -42,7 +44,13 @@ public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificatio
     @Query("UPDATE Car c SET c.contactPhone = null WHERE c.contactPhone.id = :contactPhoneId")
     void updateContactPhoneIdToNull(Long contactPhoneId);
 
-    Optional<Car> findByIdAndOwner_Id(long id, long ownerId);
+    Optional<Car> findByIdAndOwner_IdAndDeletedFalse(long id, long ownerId);
 
-    Optional<Car> findByIdAndIsPublicTrueAndIsApprovedTrue(long id);
+    Optional<Car> findByIdAndDeletedFalse(long id);
+
+    Optional<Car> findByIdAndIsPublicTrueAndIsApprovedTrueAndDeletedFalse(long id);
+
+    Page<Car> findAllByDeletedFalse(Pageable pageable);
+
+    Page<Car> findAllByOwner_IdAndDeletedFalse(long id, Pageable pageable);
 }

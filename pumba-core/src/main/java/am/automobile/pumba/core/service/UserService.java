@@ -2,6 +2,7 @@ package am.automobile.pumba.core.service;
 
 import am.automobile.pumba.core.entity.User;
 import com.automobile.pumba.data.transfer.request.UserProfileDetailsRequest;
+import com.automobile.pumba.data.transfer.request.UserUpdateRequest;
 import com.automobile.pumba.data.transfer.response.UserProfileDetailsResponse;
 import com.automobile.pumba.data.transfer.response.UserResponse;
 
@@ -33,4 +34,8 @@ public interface UserService {
     UserProfileDetailsResponse changeProfileDetailsRequest(UserProfileDetailsRequest userProfileDetailsRequest);
 
     List<UserResponse> findAll();
+
+    UserResponse updateUser(long id, UserUpdateRequest userUpdateRequest);
+
+    void deleteUserById(long id);
 }

@@ -5,6 +5,7 @@ import am.automobile.pumba.core.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +28,9 @@ public class CurrentUserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userService.findByEmail(username);
+        if (!user.isEnabled()) {
+            throw new UsernameNotFoundException("User Not Found");
+        }
         return new CurrentUser(user);
     }
 }

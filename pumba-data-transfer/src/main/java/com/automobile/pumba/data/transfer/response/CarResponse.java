@@ -19,6 +19,7 @@ public class CarResponse {
 
     private Long id;
     private String title;
+    private Long owner;
     private String subTitle;
     private Long carMake;
     private Long carModel;
@@ -26,6 +27,7 @@ public class CarResponse {
     private Long transmission;
     private Long engineType;
     private Long drivetrainType;
+    private boolean isApproved;
     private ContactPhoneResponse contactPhone;
     private ContactEmailResponse contactEmail;
     private Integer year;

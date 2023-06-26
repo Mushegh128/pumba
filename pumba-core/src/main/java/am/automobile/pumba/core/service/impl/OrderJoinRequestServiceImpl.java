@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,21 +46,7 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
         Order order = orderJoinRequest.getOrder();
         order.setManager(orderJoinRequest.getRequestSenderUser());
 
-        List<OrderJoinRequest> orderAllJoinRequestsByOrderId = orderJoinRequestRepository
-                .findByIdNotAndApproveFalseAndCancelFalse(orderJoinRequestId);
-
-        if (orderAllJoinRequestsByOrderId.isEmpty()) {
-            return;
-        }
-
-        orderAllJoinRequestsByOrderId = orderAllJoinRequestsByOrderId.stream()
-                .peek(joinRequest -> {
-                    joinRequest.setCancel(false);
-                    joinRequest.setCancelAt(LocalDateTime.now());
-                })
-                .collect(Collectors.toList());
-
-        orderJoinRequestRepository.saveAll(orderAllJoinRequestsByOrderId);
+        orderJoinRequestRepository.cancelAllOrderJoinRequestsExceptById(orderJoinRequestId, order.getId());
     }
 
     @Override
@@ -71,6 +55,11 @@ public class OrderJoinRequestServiceImpl implements OrderJoinRequestService {
         orderJoinRequest.setCancel(true);
         orderJoinRequest.setCancelAt(LocalDateTime.now());
         orderJoinRequestRepository.save(orderJoinRequest);
+    }
+
+    @Override
+    public void cancelAllOrdersRequestByUserId(long userId) {
+        orderJoinRequestRepository.cancelAllOrdersRequestByUserId(userId);
     }
 
     private Optional<OrderJoinRequest> findByOrderIdAndUserId(long orderId, long userId) {

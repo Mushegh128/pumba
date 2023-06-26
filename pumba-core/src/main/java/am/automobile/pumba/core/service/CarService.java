@@ -32,4 +32,8 @@ public interface CarService {
     CarResponse editCar(CarRequest carRequest, long carId);
 
     CarResponse findByIdAndAccess(long id);
+
+    CarResponse approveById(long id);
+
+    CarResponse cancelById(long id);
 }

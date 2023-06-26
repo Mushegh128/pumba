@@ -22,7 +22,6 @@ import am.automobile.pumba.core.specifications.CarAdminSpecifications;
 import am.automobile.pumba.core.specifications.CarSpecifications;
 import am.automobile.pumba.core.util.IOUtil;
 import com.automobile.pumba.data.transfer.model.UserPermission;
-import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarRequest;
@@ -57,6 +56,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarResponse createCar(CarRequest carRequest) {
         Car car = carMapper.toEntity(carRequest);
+        car.setDeleted(false);
         User currentUser = userService.getCurrentUser();
         car.setOwner(currentUser);
 
@@ -79,14 +79,10 @@ public class CarServiceImpl implements CarService {
     public CarResponse editCar(CarRequest carRequest, long carId) {
         User currentUser = userService.getCurrentUser();
         Car car;
-        if (currentUser.getRole().equals(UserRole.DEALER) || !currentUser.getPermissions().contains(UserPermission.MANAGE_ALL_CARS_UPDATE)) {
-            car = findByIdAndOwnerId(carId, currentUser.getId());
+        if (currentUser.getPermissions().contains(UserPermission.MANAGE_ALL_CARS_UPDATE)) {
+            car = findById(carId);
         } else {
-            if (currentUser.getPermissions().contains(UserPermission.MANAGE_CAR_APPROVE)) {
-                car = findById(carId);
-            } else {
-                car = findByIdAndIsPublicTrueAndIsApprovedTrue(carId);
-            }
+            car = findByIdAndOwnerId(carId, currentUser.getId());
         }
 
         updateCarAttributes(car, carRequest);
@@ -105,7 +101,7 @@ public class CarServiceImpl implements CarService {
         Car car = null;
         try {
             User currentUser = userService.getCurrentUser();
-            Optional<Car> carOptional = carRepository.findByIdAndOwner_Id(id, currentUser.getId());
+            Optional<Car> carOptional = carRepository.findByIdAndOwner_IdAndDeletedFalse(id, currentUser.getId());
 
             if (currentUser.getPermissions().contains(UserPermission.VIEW_All_CARS) || carOptional.isPresent()) {
                 car = findById(id);
@@ -114,6 +110,24 @@ public class CarServiceImpl implements CarService {
             car = findByIdAndIsPublicTrueAndIsApprovedTrue(id);
         }
         return carMapper.toResponse(car);
+    }
+
+    @Override
+    public CarResponse approveById(long id) {
+        Car car = findById(id);
+        car.setIsApproved(true);
+        Car save = carRepository.save(car);
+        return carMapper.toResponse(save);
+    }
+
+    @Override
+    public CarResponse cancelById(long id) {
+        Car car = findById(id);
+        car.setIsApproved(false);
+        car.setIsPublic(false);
+        car.setDeleted(true);
+        Car save = carRepository.save(car);
+        return carMapper.toResponse(save);
     }
 
     @Override
@@ -129,29 +143,38 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car findById(long id) {
         log.info("Find User by ID: {}", id);
-        return carRepository.findById(id)
+        return carRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car with id: " + id + " not found"));
     }
 
     @Override
     public Car findByIdAndIsPublicTrueAndIsApprovedTrue(long id) {
         log.info("Find User by ID: {}", id);
-        return carRepository.findByIdAndIsPublicTrueAndIsApprovedTrue(id)
+        return carRepository.findByIdAndIsPublicTrueAndIsApprovedTrueAndDeletedFalse(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car with id: " + id + " not found"));
     }
 
     @Override
     public Car findByIdAndOwnerId(long id, long ownerId) {
         log.info("Find User by ID: {}", id);
-        return carRepository.findByIdAndOwner_Id(id, ownerId)
+        return carRepository.findByIdAndOwner_IdAndDeletedFalse(id, ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Car with id: " + id + " not found"));
     }
 
     @Override
     public Page<CarResponse> findAllForAdmin(Pageable pageable, CarAdminFilterRequest carFilterRequest) {
         User currentUser = userService.getCurrentUser();
-        CarAdminSpecifications<Car> filterSpecifications = new CarAdminSpecifications<>(carFilterRequest, currentUser);
-        Page<Car> carPage = carRepository.findAll(filterSpecifications, pageable);
+        Page<Car> carPage;
+        if (carFilterRequest.getAll() != null && carFilterRequest.getAll().equals(true)) {
+            if (currentUser.getPermissions().contains(UserPermission.VIEW_All_CARS)) {
+                carPage = carRepository.findAllByDeletedFalse(pageable);
+            } else {
+                carPage = carRepository.findAllByOwner_IdAndDeletedFalse(currentUser.getId(), pageable);
+            }
+        } else {
+            CarAdminSpecifications<Car> filterSpecifications = new CarAdminSpecifications<>(carFilterRequest, currentUser);
+            carPage = carRepository.findAll(filterSpecifications, pageable);
+        }
         return carPage.map(carMapper::toResponse);
     }
 

@@ -87,6 +87,8 @@ public class Car extends AbstractEntity {
     @UpdateTimestamp
     private LocalDate updateAt;
 
+    private boolean deleted;
+
     private Boolean isPublic;
     private Boolean isApproved;
 }

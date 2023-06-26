@@ -40,14 +40,22 @@ public class AuthServiceImpl implements AuthService {
         log.info("Request from user {} to get authenticated", userAuthRequest.getUsername());
         Optional<User> optionalUser = userRepository.findByEmail(userAuthRequest.getUsername());
 
-        if (optionalUser.isEmpty()
-                || !passwordEncoder.matches(userAuthRequest.getPassword(), optionalUser.get().getPassword())) {
-            throw new AuthenticatedException(userAuthRequest.getUsername() + ": Provided wrong credentials for authentication");
+        if (optionalUser.isEmpty()) {
+            throw new AuthenticatedException(userAuthRequest.getUsername() + ": Incorrect credentials provided for authentication");
         }
-        log.info("Succeed get user by email: {}", userAuthRequest.getUsername());
+
+        User user = optionalUser.get();
+        if (!passwordEncoder.matches(userAuthRequest.getPassword(), user.getPassword()) || !user.isEnabled()) {
+            throw new AuthenticatedException(userAuthRequest.getUsername() + ": Incorrect credentials provided for authentication");
+        }
+
+        log.info("Successfully retrieved user by email: {}", userAuthRequest.getUsername());
+
+        String token = jwtTokenUtil.generateToken(userAuthRequest.getUsername());
+
         return UserAuthResponse.builder()
-                .token(jwtTokenUtil.generateToken(userAuthRequest.getUsername()))
-                .user(userMapper.toResponse(optionalUser.get()))
+                .token(token)
+                .user(userMapper.toResponse(user))
                 .build();
     }
 
@@ -60,6 +68,8 @@ public class AuthServiceImpl implements AuthService {
         }
         User user = userRegistrationMapper.toEntity(userRequest);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setEnabled(true);
+        user.setDeleted(false);
         user.setPermissions(userRequest.getPermissions());
         userRepository.save(user);
         log.info("Succeed registered user by email: {}", userRequest.getEmail());
@@ -94,6 +104,8 @@ public class AuthServiceImpl implements AuthService {
                     .phone("+37466666666")
                     .build();
             User user = userRegistrationMapper.toEntity(userRequest);
+            user.setDeleted(false);
+            user.setEnabled(true);
             user.setPassword("$2a$10$8NXc6KhYOE4gxnIemF7uZuCD887BvhMPoEmZmNjH7myA8ent19nJS");
             user.setRole(UserRole.ADMIN);
             userRepository.save(user);

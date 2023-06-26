@@ -42,17 +42,29 @@ public class CarEndpoint {
     public ResponseEntity<CarResponse> createCar(@Valid @RequestBody CarRequest carRequest) {
         return ResponseEntity.ok(carService.createCar(carRequest));
     }
-//todo  Authority-in ushadrutyun darcnel
+
     @PutMapping("/{carId}")
     @PreAuthorize("hasAnyAuthority('MANAGE_CAR_UPDATE','MANAGE_ALL_CARS_UPDATE')")
     public ResponseEntity<CarResponse> editCar(@Valid @RequestBody CarRequest carRequest, @PathVariable long carId) {
         return ResponseEntity.ok(carService.editCar(carRequest, carId));
     }
 
-    @PostAuthorize("isAuthenticated() and hasAuthority('')")
+    @PostAuthorize("isAuthenticated() and hasAuthority('MANAGE_CAR_CREATE')")
     @PostMapping("/image")
     public ResponseEntity<String> createCarImage(@RequestParam("image") MultipartFile file) {
         return ResponseEntity.ok(carService.saveImage(file));
+    }
+
+    @PostAuthorize("hasAuthority('MANAGE_CAR_APPROVE')")
+    @PostMapping("/approve/{id}")
+    public ResponseEntity<?> approve(@PathVariable long id) {
+        return ResponseEntity.ok(carService.approveById(id));
+    }
+
+    @PostAuthorize("hasAuthority('MANAGE_CAR_CANCEL')")
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelById(@PathVariable long id) {
+        return ResponseEntity.ok(carService.cancelById(id));
     }
 
     @GetMapping("/image/{fileName}")

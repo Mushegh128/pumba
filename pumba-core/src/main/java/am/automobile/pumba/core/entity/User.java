@@ -42,7 +42,10 @@ public class User extends AbstractEntity {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;
-    private boolean isEnable;
+    @Column(nullable = false)
+    private boolean isEnabled;
+    @Column(nullable = false)
+    private boolean deleted;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

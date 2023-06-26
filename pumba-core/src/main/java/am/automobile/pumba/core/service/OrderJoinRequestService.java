@@ -10,4 +10,6 @@ public interface OrderJoinRequestService {
     void approveOrderRequest(long orderJoinRequestId);
 
     void cancelOrderRequest(long orderJoinRequestId);
+
+    void cancelAllOrdersRequestByUserId(long userId);
 }

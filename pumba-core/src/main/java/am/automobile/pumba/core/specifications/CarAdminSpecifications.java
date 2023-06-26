@@ -3,7 +3,6 @@ package am.automobile.pumba.core.specifications;
 import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.specifications.filter.CarAdminFilterSpecifications;
 import com.automobile.pumba.data.transfer.model.UserPermission;
-import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -27,11 +26,13 @@ public record CarAdminSpecifications<T>(CarAdminFilterRequest carFilterRequest,
         addIsPublicPredicate(root, criteriaBuilder, predicates);
 
         Boolean myAdded = carFilterRequest().getMyAdded();
+        Predicate finalPredicate = criteriaBuilder.or(predicates.toArray(new Predicate[0]));
 
-        if (myAdded != null && myAdded || user.getRole() == UserRole.DEALER || !user.getPermissions().contains(UserPermission.VIEW_All_CARS)) {
-            predicates.add(criteriaBuilder.equal(root.get("owner").get("id"), user.getId()));
+        if (myAdded != null && myAdded || !user.getPermissions().contains(UserPermission.VIEW_All_CARS)) {
+            Predicate predicate = criteriaBuilder.equal(root.get("owner").get("id"), user.getId());
+            finalPredicate = criteriaBuilder.and(finalPredicate, predicate);
         }
 
-        return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+        return finalPredicate;
     }
 }
