@@ -45,6 +45,7 @@ public class CarDetailResponse {
     private ConditionType conditionType;
     private String engineSize;
     private Boolean isPublic;
+    private Boolean isApproved;
     private LocalDateTime createAt;
     private Integer numberOfDoors;
     private Integer numberOfSeats;

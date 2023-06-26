@@ -17,7 +17,6 @@ public class OrderRequest {
     private String companyName;
     private String country;
     private String streetAddress;
-    private String address;
     private String postcodeZip;
     private String city;
     private String province;
