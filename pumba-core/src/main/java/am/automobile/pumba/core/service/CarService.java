@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface CarService {
 
     CarResponse createCar(CarRequest carRequest);
@@ -31,9 +33,11 @@ public interface CarService {
 
     CarResponse editCar(CarRequest carRequest, long carId);
 
-    CarResponse findByIdAndAccess(long id);
+    Car findByIdAndAccess(long id);
 
     CarResponse approveById(long id);
 
     CarResponse cancelById(long id);
+
+    List<String> findAllImagesDetailUrlByCarId(long id);
 }

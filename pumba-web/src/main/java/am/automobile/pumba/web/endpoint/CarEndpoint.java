@@ -1,6 +1,7 @@
 package am.automobile.pumba.web.endpoint;
 
-import am.automobile.pumba.core.service.CarImageService;
+import am.automobile.pumba.core.entity.Car;
+import am.automobile.pumba.core.mapper.CarMapper;
 import am.automobile.pumba.core.service.CarService;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarFilterRequest;
@@ -35,7 +36,7 @@ import java.util.List;
 public class CarEndpoint {
 
     private final CarService carService;
-    private final CarImageService carImageService;
+    private final CarMapper carMapper;
 
     @PostMapping
     @PreAuthorize("hasAuthority('MANAGE_CAR_CREATE')")
@@ -93,11 +94,12 @@ public class CarEndpoint {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(carService.findByIdAndAccess(id));
+        Car car = carService.findByIdAndAccess(id);
+        return ResponseEntity.ok(carMapper.toResponse(car));
     }
 
     @GetMapping("/images/details-url/{id}")
     public ResponseEntity<List<String>> findAllDetailsImagesByCarId(@PathVariable Long id) {
-        return ResponseEntity.ok(carImageService.findAllUrlByCarId(id));
+        return ResponseEntity.ok(carService.findAllImagesDetailUrlByCarId(id));
     }
 }

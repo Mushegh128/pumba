@@ -13,7 +13,6 @@ import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.exception.EntityNotFoundException;
 import am.automobile.pumba.core.mapper.CarMapper;
 import am.automobile.pumba.core.repository.CarRepository;
-import am.automobile.pumba.core.service.CarImageService;
 import am.automobile.pumba.core.service.CarMetaDataService;
 import am.automobile.pumba.core.service.CarService;
 import am.automobile.pumba.core.service.ContactService;
@@ -35,7 +34,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,13 +46,15 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final ContactService contactService;
     private final CarMetaDataService carMetaDataService;
-    private final CarImageService carImageService;
     private final UserService userService;
     private final IOUtil ioUtil;
     private final CarMapper carMapper;
 
     @Value("${pumba.path.image.car}")
     private String imageSaveFolderPath;
+
+    @Value("${pumba.baseUrl}")
+    private String baseUrl;
 
     @Override
     public CarResponse createCar(CarRequest carRequest) {
@@ -66,11 +69,10 @@ public class CarServiceImpl implements CarService {
             car.setIsPublic(false);
         }
         car.setIsApproved(false);
-        Car save = carRepository.save(car);
-
         if (carRequest.getImagesDetails() != null && carRequest.getImagesDetails().size() > 0) {
-            carImageService.saveAll(car.getId(), carRequest.getImagesDetails());
+            car.setImages(carRequest.getImagesDetails());
         }
+        Car save = carRepository.save(car);
 
         return carMapper.toResponse(save);
     }
@@ -86,18 +88,14 @@ public class CarServiceImpl implements CarService {
         }
 
         updateCarAttributes(car, carRequest);
-
+        car.setImages(carRequest.getImagesDetails());
         Car save = carRepository.save(car);
-
-        if (carRequest.getImagesDetails() != null && carRequest.getImagesDetails().size() > 0) {
-            carImageService.saveAll(car.getId(), carRequest.getImagesDetails());
-        }
 
         return carMapper.toResponse(save);
     }
 
     @Override
-    public CarResponse findByIdAndAccess(long id) {
+    public Car findByIdAndAccess(long id) {
         Car car = null;
         try {
             User currentUser = userService.getCurrentUser();
@@ -109,7 +107,7 @@ public class CarServiceImpl implements CarService {
         } catch (RuntimeException e) {
             car = findByIdAndIsPublicTrueAndIsApprovedTrue(id);
         }
-        return carMapper.toResponse(car);
+        return car;
     }
 
     @Override
@@ -128,6 +126,13 @@ public class CarServiceImpl implements CarService {
         car.setDeleted(true);
         Car save = carRepository.save(car);
         return carMapper.toResponse(save);
+    }
+
+    @Override
+    public List<String> findAllImagesDetailUrlByCarId(long id) {
+        Car car = findByIdAndAccess(id);
+        return car.getImages().stream().map(s -> baseUrl + "/car/image/" + s)
+                .collect(Collectors.toList());
     }
 
     @Override
