@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  app-mvc:
+    container_name: app-mvc
+    image: app-rest
+    build: ./pumba-web
+    ports:
+      - "8080:8080"
+    volumes:
+      - app-image-car:/var/images/car
+volumes:
+  app-image-car:
+    driver: local
