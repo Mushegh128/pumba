@@ -23,6 +23,12 @@ public class OrderMapper implements BaseMapper<Order, OrderRequest, OrderRespons
 
     @Override
     public OrderResponse toResponse(Order order) {
+        modelMapper.typeMap(Order.class, OrderResponse.class)
+                .addMappings(mapper -> {
+                    mapper.map(src -> src.getManager().getId(), OrderResponse::setManager);
+                    mapper.map(src -> src.getCar().getId(), OrderResponse::setCar);
+                });
+
         OrderResponse orderResponse = modelMapper.map(order, OrderResponse.class);
         if (order.getManager() != null) {
             orderResponse.setManager(userMapper.toResponse(order.getManager()));

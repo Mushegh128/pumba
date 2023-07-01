@@ -57,6 +57,8 @@ public class CarMapper implements BaseMapper<Car, CarRequest, CarResponse> {
                     mapper.map(src -> src.getMake().getId(), CarDetailResponse::setCarMake);
                     mapper.map(src -> src.getModel().getId(), CarDetailResponse::setCarModel);
                     mapper.map(src -> src.getOwner().getId(), CarDetailResponse::setOwner);
+                    mapper.map(src -> src.getEngineType().getId(), CarDetailResponse::setEngineType);
+                    mapper.map(src -> src.getDrivetrainType().getId(), CarDetailResponse::setDrivetrainType);
                 });
 
         CarDetailResponse carDetailResponse = modelMapper.map(car, CarDetailResponse.class);

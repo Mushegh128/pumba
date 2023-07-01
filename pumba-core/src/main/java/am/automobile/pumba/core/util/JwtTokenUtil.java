@@ -31,6 +31,9 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
+    @Value("${jwt.refreshExpiration}")
+    private Long refreshExpiration;
+
     /**
      * Returns the username stored in the JWT token.
      *
@@ -96,7 +99,12 @@ public class JwtTokenUtil {
      */
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, email);
+        return doGenerateToken(claims, email, expiration);
+    }
+
+    public String generateRefreshToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, email, refreshExpiration);
     }
 
     /**
@@ -106,9 +114,9 @@ public class JwtTokenUtil {
      * @param email  The email of the user.
      * @return A JWT token for the user with the specified claims.
      */
-    private String doGenerateToken(Map<String, Object> claims, String email) {
+    private String doGenerateToken(Map<String, Object> claims, String email, long expiredValue) {
         final Date createdDate = new Date();
-        final Date expirationDate = calculateExpirationDate(createdDate);
+        final Date expirationDate = calculateExpirationDate(createdDate, expiredValue);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(email)
@@ -143,7 +151,7 @@ public class JwtTokenUtil {
      * @param createdDate The date the JWT token was created.
      * @return The expiration date of the JWT token.
      */
-    private Date calculateExpirationDate(Date createdDate) {
-        return new Date(createdDate.getTime() + expiration * 1000);
+    private Date calculateExpirationDate(Date createdDate, long expiredValue) {
+        return new Date(createdDate.getTime() + expiredValue * 1000);
     }
 }

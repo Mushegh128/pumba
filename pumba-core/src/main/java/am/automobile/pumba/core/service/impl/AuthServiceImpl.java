@@ -52,9 +52,11 @@ public class AuthServiceImpl implements AuthService {
         log.info("Successfully retrieved user by email: {}", userAuthRequest.getUsername());
 
         String token = jwtTokenUtil.generateToken(userAuthRequest.getUsername());
+//        String refreshToken = jwtTokenUtil.refreshToken(userAuthRequest.getUsername());
 
         return UserAuthResponse.builder()
                 .token(token)
+//                .refreshToken(refreshToken)
                 .user(userMapper.toResponse(user))
                 .build();
     }
@@ -89,6 +91,11 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(currentUser);
 
         log.info("Password changed successfully for user: {}", currentUser.getEmail());
+    }
+
+    @Override
+    public UserAuthResponse refreshToken(String token) {
+        return null;
     }
 
     @PostConstruct

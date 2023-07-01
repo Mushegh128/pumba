@@ -6,6 +6,7 @@ import am.automobile.pumba.core.service.CarService;
 import com.automobile.pumba.data.transfer.request.CarAdminFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarFilterRequest;
 import com.automobile.pumba.data.transfer.request.CarRequest;
+import com.automobile.pumba.data.transfer.response.CarDetailResponse;
 import com.automobile.pumba.data.transfer.response.CarResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -93,9 +94,9 @@ public class CarEndpoint {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<CarDetailResponse> findById(@PathVariable Long id) {
         Car car = carService.findByIdAndAccess(id);
-        return ResponseEntity.ok(carMapper.toResponse(car));
+        return ResponseEntity.ok(carMapper.toResponseDetail(car));
     }
 
     @GetMapping("/images/details-url/{id}")

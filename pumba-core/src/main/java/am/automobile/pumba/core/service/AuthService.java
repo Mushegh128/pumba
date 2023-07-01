@@ -31,4 +31,6 @@ public interface AuthService {
     UserRegistrationResponse registration(UserRegistrationRequest userRegistrationRequest);
 
     void changePassword(PasswordChangeRequest passwordChangeRequest, User currentUser);
+
+    UserAuthResponse refreshToken(String token);
 }

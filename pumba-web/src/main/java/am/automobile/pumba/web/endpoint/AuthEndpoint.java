@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,18 +36,19 @@ public class AuthEndpoint {
         return ResponseEntity.ok(auth);
     }
 
+    @PostMapping("/refresh")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String refreshToken) {
+        String token = refreshToken.substring(7);
+        UserAuthResponse auth = authService.refreshToken(token);
+        return ResponseEntity.ok(auth);
+    }
+
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> userRegister(@Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
         UserRegistrationResponse register = authService.registration(userRegistrationRequest);
         return ResponseEntity.ok(register);
-    }
-
-    // todo
-    @PostMapping("/logout")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> logout() {
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/change-password")
