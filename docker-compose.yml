@@ -10,20 +10,28 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - my-network
 
   app-rest:
-    container_name: app-mvc
-    image: app-rest
-    build: ./pumba-web
+    container_name: app-rest
+    image: app-rest-image
+    build:
+      context: ./pumba-web
     ports:
       - "8080:8080"
     volumes:
       - app-image-car:/var/images/car
     depends_on:
       - mysql-container
+    networks:
+      - my-network
 
 volumes:
   mysql-data:
     driver: local
   app-image-car:
     driver: local
+
+networks:
+  my-network:

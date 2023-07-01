@@ -1,7 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://mysql-container:3306/automobile?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql-container:3306/automobile
     username: root
+    password: root
 
 pumba:
   path:
