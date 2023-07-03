@@ -4,6 +4,7 @@ import am.automobile.pumba.core.entity.User;
 import am.automobile.pumba.core.service.AuthService;
 import am.automobile.pumba.core.service.UserService;
 import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
+import com.automobile.pumba.data.transfer.request.TokenRefreshRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,12 +36,9 @@ public class AuthEndpoint {
         return ResponseEntity.ok(auth);
     }
 
-    @PostMapping("/refresh")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String refreshToken) {
-        String token = refreshToken.substring(7);
-        UserAuthResponse auth = authService.refreshToken(token);
-        return ResponseEntity.ok(auth);
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        return ResponseEntity.ok(authService.refreshToken(request));
     }
 
     @PostMapping("/register")

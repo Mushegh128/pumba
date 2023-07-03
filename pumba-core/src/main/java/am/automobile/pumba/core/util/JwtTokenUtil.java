@@ -102,9 +102,9 @@ public class JwtTokenUtil {
         return doGenerateToken(claims, email, expiration);
     }
 
-    public String generateRefreshToken(String email) {
+    public String generateRefreshToken(String token) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, email, refreshExpiration);
+        return doGenerateToken(claims, token, refreshExpiration);
     }
 
     /**

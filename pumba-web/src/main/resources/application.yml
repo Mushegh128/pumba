@@ -21,8 +21,8 @@ springdoc:
 
 jwt:
   secret: k205j@dkjf0%^@
-  expiration: 330000
-  refreshExpiration: 3000
+  expiration: 1200
+  refreshExpiration: 2400
 
 pumba:
   path:

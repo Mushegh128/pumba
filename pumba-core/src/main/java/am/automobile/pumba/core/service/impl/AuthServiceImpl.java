@@ -11,8 +11,10 @@ import am.automobile.pumba.core.util.JwtTokenUtil;
 import com.automobile.pumba.data.transfer.model.UserPermission;
 import com.automobile.pumba.data.transfer.model.UserRole;
 import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
+import com.automobile.pumba.data.transfer.request.TokenRefreshRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
+import com.automobile.pumba.data.transfer.response.TokenRefreshResponse;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
 import com.automobile.pumba.data.transfer.response.UserRegistrationResponse;
 import jakarta.annotation.PostConstruct;
@@ -52,11 +54,11 @@ public class AuthServiceImpl implements AuthService {
         log.info("Successfully retrieved user by email: {}", userAuthRequest.getUsername());
 
         String token = jwtTokenUtil.generateToken(userAuthRequest.getUsername());
-//        String refreshToken = jwtTokenUtil.refreshToken(userAuthRequest.getUsername());
+        String refreshToken = jwtTokenUtil.generateRefreshToken(userAuthRequest.getUsername());
 
         return UserAuthResponse.builder()
                 .token(token)
-//                .refreshToken(refreshToken)
+                .refreshToken(refreshToken)
                 .user(userMapper.toResponse(user))
                 .build();
     }
@@ -94,8 +96,22 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserAuthResponse refreshToken(String token) {
-        return null;
+    public TokenRefreshResponse refreshToken(TokenRefreshRequest tokenRefreshRequest) {
+
+        try {
+            String token = tokenRefreshRequest.getRefreshToken();
+            String email = jwtTokenUtil.getUsernameFromToken(token);
+            String newAccessToken = jwtTokenUtil.generateToken(email);
+            String newRefreshToken = jwtTokenUtil.generateRefreshToken(email);
+
+            return TokenRefreshResponse.builder()
+                    .accessToken(newAccessToken)
+                    .refreshToken(newRefreshToken)
+                    .build();
+        } catch (Exception e) {
+            log.error("Error validating token: " + e.getMessage());
+            throw new AuthenticatedException("Invalid refresh token");
+        }
     }
 
     @PostConstruct

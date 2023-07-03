@@ -2,8 +2,10 @@ package am.automobile.pumba.core.service;
 
 import am.automobile.pumba.core.entity.User;
 import com.automobile.pumba.data.transfer.request.PasswordChangeRequest;
+import com.automobile.pumba.data.transfer.request.TokenRefreshRequest;
 import com.automobile.pumba.data.transfer.request.UserAuthRequest;
 import com.automobile.pumba.data.transfer.request.UserRegistrationRequest;
+import com.automobile.pumba.data.transfer.response.TokenRefreshResponse;
 import com.automobile.pumba.data.transfer.response.UserAuthResponse;
 import com.automobile.pumba.data.transfer.response.UserRegistrationResponse;
 
@@ -32,5 +34,5 @@ public interface AuthService {
 
     void changePassword(PasswordChangeRequest passwordChangeRequest, User currentUser);
 
-    UserAuthResponse refreshToken(String token);
+    TokenRefreshResponse refreshToken(TokenRefreshRequest tokenRefresh);
 }
