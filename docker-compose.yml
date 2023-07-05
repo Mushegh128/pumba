@@ -1,0 +1,37 @@
+version: '3.5'
+services:
+  mysql-container:
+    container_name: mysql-container
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=automobile
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - my-network
+
+  app-rest:
+    container_name: app-rest
+    image: app-rest-image
+    build:
+      context: ./pumba-web
+    ports:
+      - "8080:8080"
+    volumes:
+      - app-image-car:/var/images/car
+    depends_on:
+      - mysql-container
+    networks:
+      - my-network
+
+volumes:
+  mysql-data:
+    driver: local
+  app-image-car:
+    driver: local
+
+networks:
+  my-network:

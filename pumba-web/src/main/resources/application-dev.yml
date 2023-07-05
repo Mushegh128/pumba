@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-container:3306/automobile
+    username: root
+    password: root
+
+pumba:
+  path:
+    image:
+      cooperating-organization: /var/pumba
+      car: /var/images/car
+  baseUrl: http://3.75.198.120:8080/api
