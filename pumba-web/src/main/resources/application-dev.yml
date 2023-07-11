@@ -8,5 +8,5 @@ pumba:
   path:
     image:
       cooperating-organization: /var/pumba
-      car: /var/images/car
-  baseUrl: http://34.159.218.106:8080/api
+      car: /var/images/car/
+  baseUrl: http://localhost:8080/api
