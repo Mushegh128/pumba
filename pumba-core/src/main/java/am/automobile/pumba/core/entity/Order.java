@@ -51,6 +51,9 @@ public class Order extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    // todo
+//    private String boughtStatus;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;

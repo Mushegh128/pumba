@@ -54,6 +54,7 @@ public class CarRequest {
     private String description;
     private String location;
     private String videoLink;
+    private Boolean isBought;
     private Boolean isPublic;
     @NotBlank
     private String baseImage;
