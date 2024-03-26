@@ -45,6 +45,7 @@ public class CarResponse {
     private CarTracking tracking;
     private ConditionType conditionType;
     private String engineSize;
+    private Boolean isBought;
     private Boolean isPublic;
     private LocalDateTime createAt;
     private Integer numberOfDoors;

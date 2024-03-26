@@ -91,5 +91,6 @@ public class Car extends AbstractEntity {
     private boolean deleted;
 
     private Boolean isPublic;
+    private Boolean isBought;
     private Boolean isApproved;
 }
